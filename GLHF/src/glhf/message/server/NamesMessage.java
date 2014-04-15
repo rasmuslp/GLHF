@@ -1,0 +1,62 @@
+package glhf.message.server;
+
+import glhf.message.IdTuple;
+import glhf.message.ListMessage;
+import glhf.message.MessageType;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
+
+import crossnet.log.Log;
+import crossnet.util.ByteArrayReader;
+import crossnet.util.ByteArrayWriter;
+
+public class NamesMessage extends ListMessage< IdTuple< String > > {
+
+	public NamesMessage( List< IdTuple< String > > names ) {
+		super( MessageType.S_NAMES, names );
+	}
+
+	@Override
+	protected void serializeStatic( ByteArrayWriter to ) throws IOException {
+		// No static information to serialise.
+	}
+
+	@Override
+	protected void serializeListObject( int atIndex, ByteArrayWriter to ) throws IOException {
+		IdTuple< String > idTuple = this.list.get( atIndex );
+		to.writeInt( idTuple.getId() );
+		byte[] name = idTuple.getValue().getBytes( Charset.forName( "UTF-8" ) );
+		to.writeByte( name.length );
+		to.writeByteArray( name );
+	}
+
+	/**
+	 * Construct an NamesMessage from the provided payload.
+	 * 
+	 * @param payload
+	 *            The payload from which to determine the content of this.
+	 * @return A freshly parsed NamesMessage.
+	 */
+	public static NamesMessage parse( ByteArrayReader payload ) {
+		try {
+			List< IdTuple< String > > names = new ArrayList<>();
+			int count = payload.readInt();
+			for ( int i = 0; i < count; i++ ) {
+				int id = payload.readInt();
+				int nameLength = payload.readUnsignedByte();
+				byte[] nameBytes = new byte[nameLength];
+				payload.readByteArray( nameBytes );
+				String name = new String( nameBytes, Charset.forName( "UTF-8" ) );
+				names.add( new IdTuple<>( id, name ) );
+			}
+			return new NamesMessage( names );
+		} catch ( IOException e ) {
+			Log.error( "CrossNet", "Error deserializing NamesMessage:", e );
+		}
+
+		return null;
+	}
+}
