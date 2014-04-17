@@ -8,6 +8,8 @@ public enum GlhfMessageType {
 
 	// Server Messages
 
+	S_CONNECTION_CHANGE,
+
 	S_DEFINITION,
 
 	S_IDS,

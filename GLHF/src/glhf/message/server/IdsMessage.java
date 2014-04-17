@@ -51,7 +51,7 @@ public class IdsMessage extends ListMessage< Integer > {
 			}
 			return new IdsMessage( ids );
 		} catch ( IOException e ) {
-			Log.error( "CrossNet", "Error deserializing IdsMessage:", e );
+			Log.error( "GLHF", "Error deserializing IdsMessage:", e );
 		}
 
 		return null;

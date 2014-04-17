@@ -2,7 +2,8 @@ package glhf.server;
 
 import glhf.message.IdTuple;
 import glhf.message.client.SetNameMessage;
-import glhf.message.common.ChatMessage;
+import glhf.message.server.ConnectionChangeMessage;
+import glhf.message.server.IdsMessage;
 import glhf.message.server.NamesMessage;
 
 import java.io.IOException;
@@ -39,13 +40,25 @@ public class Server {
 		public void connected( Connection connection ) {
 			System.out.println( connection + " connected." );
 
-			Message message = new ChatMessage( -1, -1, "Hello and die !" );
-			connection.send( message );
+			// Send notification to all other Clients.
+			ConnectionChangeMessage connectionChangeMessage = new ConnectionChangeMessage( connection.getID(), true );
+			Server.this.crossnetServer.sendToAllExcept( connection.getID(), connectionChangeMessage );
+
+			// Send complete ID list to new connection.
+			List< Integer > connectionIds = new ArrayList<>();
+			for ( Connection c : Server.this.crossnetServer.getConnections() ) {
+				connectionIds.add( c.getID() );
+			}
+			connection.send( new IdsMessage( connectionIds ) );
 		}
 
 		@Override
 		public void disconnected( Connection connection ) {
 			System.out.println( connection + " disconnected." );
+
+			// Send notification to all other Clients.
+			ConnectionChangeMessage connectionChangeMessage = new ConnectionChangeMessage( connection.getID(), false );
+			Server.this.crossnetServer.sendToAllExcept( connection.getID(), connectionChangeMessage );
 		}
 
 		@Override

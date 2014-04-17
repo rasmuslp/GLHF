@@ -39,7 +39,7 @@ public class SetReadyMessage extends GlhfMessage {
 			boolean ready = payload.readBoolean();
 			return new SetReadyMessage( ready );
 		} catch ( IOException e ) {
-			Log.error( "CrossNet", "Error deserializing SetReadyMessage:", e );
+			Log.error( "GLHF", "Error deserializing SetReadyMessage:", e );
 		}
 
 		return null;

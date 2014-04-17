@@ -62,7 +62,7 @@ public class NamesMessage extends ListMessage< IdTuple< String > > {
 			}
 			return new NamesMessage( names );
 		} catch ( IOException e ) {
-			Log.error( "CrossNet", "Error deserializing NamesMessage:", e );
+			Log.error( "GLHF", "Error deserializing NamesMessage:", e );
 		}
 
 		return null;

@@ -59,7 +59,7 @@ public class ChatMessage extends GlhfMessage {
 			String chatMessage = new String( data, Charset.forName( "UTF-8" ) );
 			return new ChatMessage( senderId, receiverId, chatMessage );
 		} catch ( IOException e ) {
-			Log.error( "CrossNet", "Error deserializing ChatMessage:", e );
+			Log.error( "GLHF", "Error deserializing ChatMessage:", e );
 		}
 
 		return null;

@@ -28,6 +28,7 @@ public class ServerMessageParser extends AbstractMessageParser< GlhfMessageType 
 			case CHAT:
 				message = ChatMessage.parse( payload );
 				break;
+			case S_CONNECTION_CHANGE:
 			case S_DEFINITION:
 			case S_PING_STATUS:
 			case S_READY_STATUS:

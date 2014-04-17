@@ -43,7 +43,7 @@ public class SetNameMessage extends GlhfMessage {
 			String name = new String( data, Charset.forName( "UTF-8" ) );
 			return new SetNameMessage( name );
 		} catch ( IOException e ) {
-			Log.error( "CrossNet", "Error deserializing SetNameMessage:", e );
+			Log.error( "GLHF", "Error deserializing SetNameMessage:", e );
 		}
 
 		return null;

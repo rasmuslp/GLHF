@@ -2,6 +2,7 @@ package glhf.client;
 
 import glhf.message.GlhfMessageType;
 import glhf.message.common.ChatMessage;
+import glhf.message.server.ConnectionChangeMessage;
 import glhf.message.server.IdsMessage;
 import glhf.message.server.NamesMessage;
 import glhf.message.server.ReadyStatusMessage;
@@ -30,6 +31,9 @@ public class ClientMessageParser extends AbstractMessageParser< GlhfMessageType 
 		switch ( glhfMessageType ) {
 			case CHAT:
 				message = ChatMessage.parse( payload );
+				break;
+			case S_CONNECTION_CHANGE:
+				message = ConnectionChangeMessage.parse( payload );
 				break;
 			case S_DEFINITION:
 				break;

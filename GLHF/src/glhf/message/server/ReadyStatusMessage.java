@@ -102,8 +102,7 @@ public class ReadyStatusMessage extends ListMessage< IdTuple< Boolean > > {
 			}
 			return new ReadyStatusMessage( noReady, noNotReady, readyIds );
 		} catch ( IOException e ) {
-			System.out.println( "ROFL" );
-			Log.error( "CrossNet", "Error deserializing ReadyStatusMessage:", e );
+			Log.error( "GLHF", "Error deserializing ReadyStatusMessage:", e );
 		}
 
 		return null;

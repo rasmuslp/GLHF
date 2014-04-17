@@ -3,6 +3,8 @@ package glhf.client;
 import glhf.message.IdTuple;
 import glhf.message.client.SetNameMessage;
 import glhf.message.common.ChatMessage;
+import glhf.message.server.ConnectionChangeMessage;
+import glhf.message.server.IdsMessage;
 import glhf.message.server.NamesMessage;
 
 import java.io.IOException;
@@ -59,6 +61,22 @@ public class Client {
 			if ( message instanceof ChatMessage ) {
 				ChatMessage chatMessage = (ChatMessage) message;
 				System.out.println( "SCHAT: " + chatMessage.getChatMessage() );
+			} else if ( message instanceof ConnectionChangeMessage ) {
+				ConnectionChangeMessage connectionChangeMessage = (ConnectionChangeMessage) message;
+				String out = "Connection " + connectionChangeMessage.getConnectionID();
+				if ( connectionChangeMessage.didConnect() ) {
+					out += " connected.";
+				} else {
+					out += " disconnected.";
+				}
+				System.out.println( out );
+			} else if ( message instanceof IdsMessage ) {
+				IdsMessage idsMessage = (IdsMessage) message;
+				String out = "Client IDs:";
+				for ( Integer i : idsMessage.getList() ) {
+					out += " " + i;
+				}
+				System.out.println( out );
 			} else if ( message instanceof NamesMessage ) {
 				NamesMessage namesMessage = (NamesMessage) message;
 				System.out.println( "New Client names:" );
