@@ -1,7 +1,7 @@
 package glhf.message.server;
 
+import glhf.message.GlhfMessageType;
 import glhf.message.ListMessage;
-import glhf.message.MessageType;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,10 +11,16 @@ import crossnet.log.Log;
 import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
+/**
+ * A list of all relevant {@link Client}s. 'Relevant' may depend on context.
+ * 
+ * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
+ * 
+ */
 public class IdsMessage extends ListMessage< Integer > {
 
 	public IdsMessage( List< Integer > list ) {
-		super( MessageType.S_IDS, list );
+		super( GlhfMessageType.S_IDS, list );
 	}
 
 	@Override

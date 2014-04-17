@@ -1,7 +1,7 @@
 package glhf.message.common;
 
 import glhf.message.GlhfMessage;
-import glhf.message.MessageType;
+import glhf.message.GlhfMessageType;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -17,7 +17,7 @@ public class ChatMessage extends GlhfMessage {
 	private final String chatMessage;
 
 	public ChatMessage( final int senderId, final int receiverId, final String chatMessage ) {
-		super( MessageType.CHAT );
+		super( GlhfMessageType.CHAT );
 		this.senderId = senderId;
 		this.receiverId = receiverId;
 		this.chatMessage = chatMessage;

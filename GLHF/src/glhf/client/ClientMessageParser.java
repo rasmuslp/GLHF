@@ -1,6 +1,6 @@
 package glhf.client;
 
-import glhf.message.MessageType;
+import glhf.message.GlhfMessageType;
 import glhf.message.common.ChatMessage;
 import glhf.message.server.IdsMessage;
 import glhf.message.server.NamesMessage;
@@ -17,17 +17,17 @@ import crossnet.util.ByteArrayReader;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class ClientMessageParser extends AbstractMessageParser< MessageType > {
+public class ClientMessageParser extends AbstractMessageParser< GlhfMessageType > {
 
 	public ClientMessageParser() {
-		super( MessageType.class );
+		super( GlhfMessageType.class );
 	}
 
 	@Override
-	protected Message parseType( MessageType messageType, ByteArrayReader payload ) {
+	protected Message parseType( GlhfMessageType glhfMessageType, ByteArrayReader payload ) {
 		Message message = null;
 
-		switch ( messageType ) {
+		switch ( glhfMessageType ) {
 			case CHAT:
 				message = ChatMessage.parse( payload );
 				break;
@@ -47,7 +47,7 @@ public class ClientMessageParser extends AbstractMessageParser< MessageType > {
 			case C_READY:
 			case C_NAME:
 			case C_NAMES:
-				Log.error( "GLHF", "Client received Client MessageType. This makes no sense. Type was: " + messageType );
+				Log.error( "GLHF", "Client received Client GlhfMessageType. This makes no sense. Type was: " + glhfMessageType );
 				break;
 //			case DATA:
 //				message = DataMessage.parse( dataReader );
@@ -58,7 +58,7 @@ public class ClientMessageParser extends AbstractMessageParser< MessageType > {
 //				}
 //				break;
 			default:
-				Log.error( "GLHF", "Unknown MessageType, cannot parse: " + messageType );
+				Log.error( "GLHF", "Unknown GlhfMessageType, cannot parse: " + glhfMessageType );
 				break;
 		}
 

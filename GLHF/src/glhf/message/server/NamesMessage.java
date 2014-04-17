@@ -1,8 +1,8 @@
 package glhf.message.server;
 
+import glhf.message.GlhfMessageType;
 import glhf.message.IdTuple;
 import glhf.message.ListMessage;
-import glhf.message.MessageType;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -13,10 +13,18 @@ import crossnet.log.Log;
 import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
+/**
+ * Names of relevant {@link Client}s. 'Relevant' may depend on context.
+ * <p>
+ * NB: This may be partial.
+ * 
+ * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
+ * 
+ */
 public class NamesMessage extends ListMessage< IdTuple< String > > {
 
 	public NamesMessage( List< IdTuple< String > > names ) {
-		super( MessageType.S_NAMES, names );
+		super( GlhfMessageType.S_NAMES, names );
 	}
 
 	@Override

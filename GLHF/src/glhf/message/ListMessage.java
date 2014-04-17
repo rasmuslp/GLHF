@@ -9,8 +9,8 @@ public abstract class ListMessage< T > extends GlhfMessage {
 
 	protected final List< T > list;
 
-	public ListMessage( MessageType messageType, final List< T > list ) {
-		super( messageType );
+	public ListMessage( GlhfMessageType glhfMessageType, final List< T > list ) {
+		super( glhfMessageType );
 		this.list = list;
 	}
 

@@ -1,6 +1,6 @@
 package glhf.message;
 
-public enum MessageType {
+public enum GlhfMessageType {
 
 	// Common
 

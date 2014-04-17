@@ -2,10 +2,10 @@ package glhf.message;
 
 import crossnet.message.AbstractMessage;
 
-public abstract class GlhfMessage extends AbstractMessage< MessageType > {
+public abstract class GlhfMessage extends AbstractMessage< GlhfMessageType > {
 
-	public GlhfMessage( MessageType messageType ) {
-		super( messageType );
+	public GlhfMessage( GlhfMessageType glhfMessageType ) {
+		super( glhfMessageType );
 	}
 
 }

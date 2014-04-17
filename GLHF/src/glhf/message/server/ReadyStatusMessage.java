@@ -1,8 +1,8 @@
 package glhf.message.server;
 
+import glhf.message.GlhfMessageType;
 import glhf.message.IdTuple;
 import glhf.message.ListMessage;
-import glhf.message.MessageType;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,25 +12,55 @@ import crossnet.log.Log;
 import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
+/**
+ * Ready status of relevant {@link Client}s. 'Relevant' may depend on context.
+ * <p>
+ * NB: This may be partial.
+ * 
+ * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
+ * 
+ */
 public class ReadyStatusMessage extends ListMessage< IdTuple< Boolean > > {
 
+	/**
+	 * Number of ready {@link Client}s.
+	 */
 	private final int noReady;
+
+	/**
+	 * Number of not ready {@link Client}s.
+	 */
 	private final int noNotReady;
 
 	public ReadyStatusMessage( final int noReady, final int noNotReady, List< IdTuple< Boolean > > list ) {
-		super( MessageType.S_READY_STATUS, list );
+		super( GlhfMessageType.S_READY_STATUS, list );
 		this.noReady = noReady;
 		this.noNotReady = noNotReady;
 	}
 
+	/**
+	 * Get the number of ready {@link Client}s.
+	 * 
+	 * @return The number of ready {@link Client}s.
+	 */
 	public int getNoReady() {
 		return this.noReady;
 	}
 
+	/**
+	 * Get the number of not ready {@link Client}s.
+	 * 
+	 * @return The number of not ready {@link Client}s.
+	 */
 	public int getNoNotReady() {
 		return this.noNotReady;
 	}
 
+	/**
+	 * Determine if all relevant {@link Client}s are ready.
+	 * 
+	 * @return {@code True} iff there are no not ready {@link Client}s.
+	 */
 	public boolean allReady() {
 		if ( this.noNotReady == 0 ) {
 			return true;

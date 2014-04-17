@@ -1,7 +1,7 @@
 package glhf.message.client;
 
 import glhf.message.GlhfMessage;
-import glhf.message.MessageType;
+import glhf.message.GlhfMessageType;
 
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ public class SetReadyMessage extends GlhfMessage {
 	private final boolean ready;
 
 	public SetReadyMessage( final boolean ready ) {
-		super( MessageType.C_READY );
+		super( GlhfMessageType.C_READY );
 		this.ready = ready;
 	}
 

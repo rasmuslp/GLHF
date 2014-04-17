@@ -1,7 +1,7 @@
 package glhf.message.client;
 
 import glhf.message.GlhfMessage;
-import glhf.message.MessageType;
+import glhf.message.GlhfMessageType;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -15,7 +15,7 @@ public class SetNameMessage extends GlhfMessage {
 	private final String name;
 
 	public SetNameMessage( final String name ) {
-		super( MessageType.C_NAME );
+		super( GlhfMessageType.C_NAME );
 		this.name = name;
 	}
 
