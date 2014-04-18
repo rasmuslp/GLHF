@@ -50,7 +50,7 @@ public class NamesMessage extends ListMessage< IdTuple< String > > {
 	 */
 	public static NamesMessage parse( ByteArrayReader payload ) {
 		try {
-			List< IdTuple< String > > names = new ArrayList<>();
+			List< IdTuple< String > > tuples = new ArrayList<>();
 			int count = payload.readInt();
 			for ( int i = 0; i < count; i++ ) {
 				int id = payload.readInt();
@@ -58,9 +58,9 @@ public class NamesMessage extends ListMessage< IdTuple< String > > {
 				byte[] nameBytes = new byte[nameLength];
 				payload.readByteArray( nameBytes );
 				String name = new String( nameBytes, Charset.forName( "UTF-8" ) );
-				names.add( new IdTuple<>( id, name ) );
+				tuples.add( new IdTuple<>( id, name ) );
 			}
-			return new NamesMessage( names );
+			return new NamesMessage( tuples );
 		} catch ( IOException e ) {
 			Log.error( "GLHF", "Error deserializing NamesMessage:", e );
 		}

@@ -8,24 +8,20 @@ public enum GlhfMessageType {
 
 	// Server Messages
 
-	S_CONNECTION_CHANGE,
-
-	S_DEFINITION,
-
 	S_IDS,
 
-	S_PING_STATUS,
-
-	S_READY_STATUS,
+	S_CONNECTION_CHANGE,
 
 	S_NAMES,
 
-	// Client Messages
+	S_PINGS,
 
-	C_READY,
+	S_READYS,
+
+	// Client Messages
 
 	C_NAME,
 
-	C_NAMES,
+	C_READY,
 
 }

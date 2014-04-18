@@ -4,7 +4,7 @@ import glhf.client.ClientMessageParser;
 import glhf.message.IdTuple;
 import glhf.message.server.IdsMessage;
 import glhf.message.server.NamesMessage;
-import glhf.message.server.ReadyStatusMessage;
+import glhf.message.server.ReadysMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,21 +51,21 @@ public class Testing {
 			System.out.println( "ID: " + i );
 		}
 
-		// ReadyStatusMessage
+		// ReadysMessage
 
 		List< IdTuple< Boolean > > listReady = new ArrayList<>();
 		listReady.add( new IdTuple<>( 1, false ) );
 		listReady.add( new IdTuple<>( 4, true ) );
 
-		ReadyStatusMessage readyStatusMessage = new ReadyStatusMessage( 5, 3, listReady );
-		byte[] readyBytes = readyStatusMessage.getBytes();
+		ReadysMessage readysMessage = new ReadysMessage( 5, 3, listReady );
+		byte[] readyBytes = readysMessage.getBytes();
 
 		System.out.println( CrossNetUtil.bytesToHex( readyBytes ) );
 
-		ReadyStatusMessage readyStatusMessageParsed = (ReadyStatusMessage) clientMessageParser.parseData( readyBytes );
-		System.out.println( "No. ready: " + readyStatusMessageParsed.getNoReady() );
-		System.out.println( "No. not ready: " + readyStatusMessageParsed.getNoNotReady() );
-		for ( IdTuple< Boolean > idTuple : readyStatusMessageParsed.getList() ) {
+		ReadysMessage readysMessageParsed = (ReadysMessage) clientMessageParser.parseData( readyBytes );
+		System.out.println( "No. ready: " + readysMessageParsed.getNoReady() );
+		System.out.println( "No. not ready: " + readysMessageParsed.getNoNotReady() );
+		for ( IdTuple< Boolean > idTuple : readysMessageParsed.getList() ) {
 			System.out.println( "ID: " + idTuple.getId() + " Ready: " + idTuple.getValue() );
 		}
 

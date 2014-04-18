@@ -20,7 +20,7 @@ import crossnet.util.ByteArrayWriter;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class ReadyStatusMessage extends ListMessage< IdTuple< Boolean > > {
+public class ReadysMessage extends ListMessage< IdTuple< Boolean > > {
 
 	/**
 	 * Number of ready {@link Client}s.
@@ -32,8 +32,8 @@ public class ReadyStatusMessage extends ListMessage< IdTuple< Boolean > > {
 	 */
 	private final int noNotReady;
 
-	public ReadyStatusMessage( final int noReady, final int noNotReady, List< IdTuple< Boolean > > list ) {
-		super( GlhfMessageType.S_READY_STATUS, list );
+	public ReadysMessage( final int noReady, final int noNotReady, List< IdTuple< Boolean > > list ) {
+		super( GlhfMessageType.S_READYS, list );
 		this.noReady = noReady;
 		this.noNotReady = noNotReady;
 	}
@@ -83,26 +83,26 @@ public class ReadyStatusMessage extends ListMessage< IdTuple< Boolean > > {
 	}
 
 	/**
-	 * Construct an ReadyStatusMessage from the provided payload.
+	 * Construct an ReadysMessage from the provided payload.
 	 * 
 	 * @param payload
 	 *            The payload from which to determine the content of this.
-	 * @return A freshly parsed ReadyStatusMessage.
+	 * @return A freshly parsed ReadysMessage.
 	 */
-	public static ReadyStatusMessage parse( ByteArrayReader payload ) {
+	public static ReadysMessage parse( ByteArrayReader payload ) {
 		try {
 			int noReady = payload.readInt();
 			int noNotReady = payload.readInt();
 			int count = payload.readInt();
-			List< IdTuple< Boolean > > readyIds = new ArrayList<>();
+			List< IdTuple< Boolean > > tuples = new ArrayList<>();
 			for ( int i = 0; i < count; i++ ) {
 				int id = payload.readInt();
 				boolean ready = payload.readBoolean();
-				readyIds.add( new IdTuple<>( id, ready ) );
+				tuples.add( new IdTuple<>( id, ready ) );
 			}
-			return new ReadyStatusMessage( noReady, noNotReady, readyIds );
+			return new ReadysMessage( noReady, noNotReady, tuples );
 		} catch ( IOException e ) {
-			Log.error( "GLHF", "Error deserializing ReadyStatusMessage:", e );
+			Log.error( "GLHF", "Error deserializing ReadysMessage:", e );
 		}
 
 		return null;

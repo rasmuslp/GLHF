@@ -20,7 +20,7 @@ public class ConnectionChangeMessage extends GlhfMessage {
 	/**
 	 * The connection ID of the {@link Client}.
 	 */
-	private final int connectionId;
+	private final int id;
 
 	/**
 	 * {@code True} iff the {@link Client} connected, false if it disconnected.
@@ -30,14 +30,14 @@ public class ConnectionChangeMessage extends GlhfMessage {
 	/**
 	 * Announces the connection change for a {@link Client}.
 	 * 
-	 * @param connectionId
+	 * @param id
 	 *            The ID of the {@link Client} that has changed connection state.
 	 * @param didConnect
 	 *            {@code True} iff the {@link Client} connected, false if it disconnected.
 	 */
-	public ConnectionChangeMessage( final int connectionId, final boolean didConnect ) {
+	public ConnectionChangeMessage( final int id, final boolean didConnect ) {
 		super( GlhfMessageType.S_CONNECTION_CHANGE );
-		this.connectionId = connectionId;
+		this.id = id;
 		this.didConnect = didConnect;
 	}
 
@@ -46,8 +46,8 @@ public class ConnectionChangeMessage extends GlhfMessage {
 	 * 
 	 * @return The connection ID.
 	 */
-	public int getConnectionID() {
-		return this.connectionId;
+	public int getID() {
+		return this.id;
 	}
 
 	/**
@@ -59,7 +59,7 @@ public class ConnectionChangeMessage extends GlhfMessage {
 
 	@Override
 	protected void serializePayload( ByteArrayWriter to ) throws IOException {
-		to.writeInt( this.connectionId );
+		to.writeInt( this.id );
 		to.writeBoolean( this.didConnect );
 	}
 
@@ -72,9 +72,9 @@ public class ConnectionChangeMessage extends GlhfMessage {
 	 */
 	public static ConnectionChangeMessage parse( ByteArrayReader payload ) {
 		try {
-			int connectionId = payload.readInt();
+			int id = payload.readInt();
 			boolean didConnect = payload.readBoolean();
-			return new ConnectionChangeMessage( connectionId, didConnect );
+			return new ConnectionChangeMessage( id, didConnect );
 		} catch ( IOException e ) {
 			Log.error( "GLHF", "Error deserializing ConnectionChangeMessage:", e );
 		}

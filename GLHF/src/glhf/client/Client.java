@@ -1,31 +1,30 @@
 package glhf.client;
 
-import glhf.message.IdTuple;
+import glhf.common.User;
 import glhf.message.client.SetNameMessage;
-import glhf.message.common.ChatMessage;
-import glhf.message.server.ConnectionChangeMessage;
-import glhf.message.server.IdsMessage;
-import glhf.message.server.NamesMessage;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.HashMap;
+import java.util.Map;
 
-import crossnet.Connection;
-import crossnet.listener.ConnectionListenerAdapter;
-import crossnet.message.Message;
 import crossnet.message.MessageParser;
 
 public class Client {
 
-	private crossnet.Client crossnetClient = new crossnet.Client();
+	private final crossnet.Client crossnetClient = new crossnet.Client();
 
-	private MessageParser messageParser = new ClientMessageParser();
+	private final MessageParser messageParser = new ClientMessageParser();
+
+	private final Map< Integer, User > users = new HashMap<>();
+
+	private final ClientListener clientListener;
 
 	public Client() {
 		this.crossnetClient.getMessageParser().setTieredMessageParser( this.messageParser );
 
-		ClientListener clientListener = new ClientListener();
-		this.crossnetClient.addConnectionListener( clientListener );
+		this.clientListener = new ClientListener( this );
+		this.crossnetClient.addConnectionListener( this.clientListener );
 
 		this.crossnetClient.start( "CrossNet Client" );
 	}
@@ -34,63 +33,23 @@ public class Client {
 		this.crossnetClient.connect( host, port, 5000 );
 	}
 
-	public int getId() {
+	/**
+	 * Gets the ID of this. Will be -1 if not properly connected to {@link Server}.
+	 * 
+	 * @return The ID of this.
+	 */
+	public int getID() {
 		return this.crossnetClient.getConnection().getID();
+	}
+
+	public Map< Integer, User > getUsers() {
+		// When connected, will include all users; i.e. also this Client, not just other users.
+		return this.users;
 	}
 
 	public void setName( String name ) {
 		SetNameMessage setNameMessage = new SetNameMessage( name );
 		this.crossnetClient.getConnection().send( setNameMessage );
-	}
-
-	public class ClientListener extends ConnectionListenerAdapter {
-
-		@Override
-		public void connected( Connection connection ) {
-			System.out.println( connection + " connected." );
-		}
-
-		@Override
-		public void disconnected( Connection connection ) {
-			System.out.println( connection + " disconnected." );
-		}
-
-		@Override
-		public void received( Connection connection, Message message ) {
-			System.out.println( connection + " received: " + message.getClass().getSimpleName() );
-			if ( message instanceof ChatMessage ) {
-				ChatMessage chatMessage = (ChatMessage) message;
-				System.out.println( "SCHAT: " + chatMessage.getChatMessage() );
-			} else if ( message instanceof ConnectionChangeMessage ) {
-				ConnectionChangeMessage connectionChangeMessage = (ConnectionChangeMessage) message;
-				String out = "Connection " + connectionChangeMessage.getConnectionID();
-				if ( connectionChangeMessage.didConnect() ) {
-					out += " connected.";
-				} else {
-					out += " disconnected.";
-				}
-				System.out.println( out );
-			} else if ( message instanceof IdsMessage ) {
-				IdsMessage idsMessage = (IdsMessage) message;
-				String out = "Client IDs:";
-				for ( Integer i : idsMessage.getList() ) {
-					out += " " + i;
-				}
-				System.out.println( out );
-			} else if ( message instanceof NamesMessage ) {
-				NamesMessage namesMessage = (NamesMessage) message;
-				System.out.println( "New Client names:" );
-				for ( IdTuple< String > idTuple : namesMessage.getList() ) {
-					System.out.println( "Client " + idTuple.getId() + " now has the name '" + idTuple.getValue() + "'" );
-				}
-			}
-		}
-
-		@Override
-		public void idle( Connection connection ) {
-			// Override this if necessary.
-		}
-
 	}
 
 }

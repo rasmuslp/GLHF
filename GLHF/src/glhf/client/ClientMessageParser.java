@@ -5,7 +5,8 @@ import glhf.message.common.ChatMessage;
 import glhf.message.server.ConnectionChangeMessage;
 import glhf.message.server.IdsMessage;
 import glhf.message.server.NamesMessage;
-import glhf.message.server.ReadyStatusMessage;
+import glhf.message.server.PingsMessage;
+import glhf.message.server.ReadysMessage;
 import glhf.server.Server;
 import crossnet.log.Log;
 import crossnet.message.AbstractMessageParser;
@@ -32,35 +33,28 @@ public class ClientMessageParser extends AbstractMessageParser< GlhfMessageType 
 			case CHAT:
 				message = ChatMessage.parse( payload );
 				break;
-			case S_CONNECTION_CHANGE:
-				message = ConnectionChangeMessage.parse( payload );
-				break;
-			case S_DEFINITION:
-				break;
+
 			case S_IDS:
 				message = IdsMessage.parse( payload );
 				break;
-			case S_PING_STATUS:
-				break;
-			case S_READY_STATUS:
-				message = ReadyStatusMessage.parse( payload );
+			case S_CONNECTION_CHANGE:
+				message = ConnectionChangeMessage.parse( payload );
 				break;
 			case S_NAMES:
 				message = NamesMessage.parse( payload );
 				break;
-			case C_READY:
+			case S_PINGS:
+				message = PingsMessage.parse( payload );
+				break;
+			case S_READYS:
+				message = ReadysMessage.parse( payload );
+				break;
+
 			case C_NAME:
-			case C_NAMES:
+			case C_READY:
 				Log.error( "GLHF", "Client received Client GlhfMessageType. This makes no sense. Type was: " + glhfMessageType );
 				break;
-//			case DATA:
-//				message = DataMessage.parse( dataReader );
-//				if ( this.tieredMessageParser != null ) {
-//					message = this.tieredMessageParser.parseData( message.getBytes() );
-//				} else {
-//					Log.warn( "GLHF", "No tiered parser: Cannot parse content of DataMessage." );
-//				}
-//				break;
+
 			default:
 				Log.error( "GLHF", "Unknown GlhfMessageType, cannot parse: " + glhfMessageType );
 				break;
