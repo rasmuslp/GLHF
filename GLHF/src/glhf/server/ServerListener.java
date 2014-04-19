@@ -1,6 +1,7 @@
 package glhf.server;
 
 import glhf.common.Player;
+import glhf.common.Players;
 import glhf.message.IdTuple;
 import glhf.message.client.SetNameMessage;
 import glhf.message.client.SetReadyMessage;
@@ -22,21 +23,21 @@ public class ServerListener extends ConnectionListenerAdapter {
 
 	private final Server server;
 
-	public ServerListener( final Server server ) {
+	private final Players players;
+
+	public ServerListener( final Server server, final Players players ) {
 		this.server = server;
+		this.players = players;
 	}
 
 	@Override
 	public void connected( Connection connection ) {
 		System.out.println( connection + " connected." );
 
-		// Store locally
 		int id = connection.getID();
-		Map< Integer, Player > players = this.server.getPlayers();
-		if ( players.containsKey( id ) ) {
-			Log.warn( "GLHF", "Server already had the player with id '" + id + "' in its list." );
-		}
-		players.put( id, new Player( id ) );
+
+		// Store locally
+		this.players.addPlayer( connection.getID() );
 
 		// Send notification to all other Clients.
 		ConnectionChangeMessage connectionChangeMessage = new ConnectionChangeMessage( id, true );
@@ -45,34 +46,26 @@ public class ServerListener extends ConnectionListenerAdapter {
 		// Send complete ID list to new connection.
 		List< Integer > ids = new ArrayList<>();
 		List< IdTuple< String >> names = new ArrayList<>();
-		for ( Player player : players.values() ) {
+		for ( Player player : this.players.getPlayers().values() ) {
 			ids.add( player.getID() );
 			names.add( new IdTuple<>( player.getID(), player.getName() ) );
 		}
-
 		connection.send( new IdsMessage( ids ) );
 		connection.send( new NamesMessage( names ) );
-
-		//TODO Announce connected.
 	}
 
 	@Override
 	public void disconnected( Connection connection ) {
 		System.out.println( connection + " disconnected." );
 
-		// Remove from local store.
 		int id = connection.getID();
-		Map< Integer, Player > players = this.server.getPlayers();
-		if ( !players.containsKey( id ) ) {
-			Log.warn( "GLHF", "Server didn't have the player with id '" + id + "' in its list." );
-		}
-		players.remove( id );
+
+		// Remove from local store.
+		this.players.removePlayer( id );
 
 		// Send notification to all other Clients.
-		ConnectionChangeMessage connectionChangeMessage = new ConnectionChangeMessage( connection.getID(), false );
-		this.server.sendToAllExcept( connection.getID(), connectionChangeMessage );
-
-		//TODO Announce disconnected.
+		ConnectionChangeMessage connectionChangeMessage = new ConnectionChangeMessage( id, false );
+		this.server.sendToAllExcept( id, connectionChangeMessage );
 	}
 
 	@Override
