@@ -1,6 +1,6 @@
 package glhf.server;
 
-import glhf.common.User;
+import glhf.common.Player;
 import glhf.message.IdTuple;
 import glhf.message.client.SetNameMessage;
 import glhf.message.client.SetReadyMessage;
@@ -32,11 +32,11 @@ public class ServerListener extends ConnectionListenerAdapter {
 
 		// Store locally
 		int id = connection.getID();
-		Map< Integer, User > users = this.server.getUsers();
-		if ( users.containsKey( id ) ) {
-			Log.warn( "GLHF", "Server already had the user with id '" + id + "' in its list." );
+		Map< Integer, Player > players = this.server.getPlayers();
+		if ( players.containsKey( id ) ) {
+			Log.warn( "GLHF", "Server already had the player with id '" + id + "' in its list." );
 		}
-		users.put( id, new User( id ) );
+		players.put( id, new Player( id ) );
 
 		// Send notification to all other Clients.
 		ConnectionChangeMessage connectionChangeMessage = new ConnectionChangeMessage( id, true );
@@ -45,9 +45,9 @@ public class ServerListener extends ConnectionListenerAdapter {
 		// Send complete ID list to new connection.
 		List< Integer > ids = new ArrayList<>();
 		List< IdTuple< String >> names = new ArrayList<>();
-		for ( User user : users.values() ) {
-			ids.add( user.getID() );
-			names.add( new IdTuple<>( user.getID(), user.getName() ) );
+		for ( Player player : players.values() ) {
+			ids.add( player.getID() );
+			names.add( new IdTuple<>( player.getID(), player.getName() ) );
 		}
 
 		connection.send( new IdsMessage( ids ) );
@@ -62,11 +62,11 @@ public class ServerListener extends ConnectionListenerAdapter {
 
 		// Remove from local store.
 		int id = connection.getID();
-		Map< Integer, User > users = this.server.getUsers();
-		if ( !users.containsKey( id ) ) {
-			Log.warn( "GLHF", "Server didn't have the user with id '" + id + "' in its list." );
+		Map< Integer, Player > players = this.server.getPlayers();
+		if ( !players.containsKey( id ) ) {
+			Log.warn( "GLHF", "Server didn't have the player with id '" + id + "' in its list." );
 		}
-		users.remove( id );
+		players.remove( id );
 
 		// Send notification to all other Clients.
 		ConnectionChangeMessage connectionChangeMessage = new ConnectionChangeMessage( connection.getID(), false );
@@ -78,18 +78,18 @@ public class ServerListener extends ConnectionListenerAdapter {
 	@Override
 	public void received( Connection connection, Message message ) {
 		int id = connection.getID();
-		Map< Integer, User > users = this.server.getUsers();
+		Map< Integer, Player > players = this.server.getPlayers();
 
 		System.out.println( connection + " received: " + message.getClass().getSimpleName() );
 		if ( message instanceof SetNameMessage ) {
 			SetNameMessage setNameMessage = (SetNameMessage) message;
 			String name = setNameMessage.getName();
 
-			if ( !users.containsKey( id ) ) {
-				Log.error( "GLHF", "Server didn't have the user with id '" + id + "' in its list." );
+			if ( !players.containsKey( id ) ) {
+				Log.error( "GLHF", "Server didn't have the player with id '" + id + "' in its list." );
 			}
 
-			users.get( id ).setName( name );
+			players.get( id ).setName( name );
 
 			IdTuple< String > idName = new IdTuple<>( id, name );
 			List< IdTuple< String > > names = new ArrayList<>();
@@ -102,16 +102,16 @@ public class ServerListener extends ConnectionListenerAdapter {
 			SetReadyMessage setReadyMessage = (SetReadyMessage) message;
 			boolean ready = setReadyMessage.isReady();
 
-			if ( !users.containsKey( id ) ) {
-				Log.error( "GLHF", "Server didn't have the user with id '" + id + "' in its list." );
+			if ( !players.containsKey( id ) ) {
+				Log.error( "GLHF", "Server didn't have the player with id '" + id + "' in its list." );
 			}
 
-			users.get( id ).setReady( ready );
+			players.get( id ).setReady( ready );
 
 			int noReady = 0;
 			int noNotReady = 0;
-			for ( User user : users.values() ) {
-				if ( user.isReady() ) {
+			for ( Player player : players.values() ) {
+				if ( player.isReady() ) {
 					noReady++;
 				} else {
 					noNotReady++;

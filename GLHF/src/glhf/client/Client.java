@@ -1,6 +1,6 @@
 package glhf.client;
 
-import glhf.common.User;
+import glhf.common.Player;
 import glhf.message.client.SetNameMessage;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ public class Client {
 
 	private final MessageParser messageParser = new ClientMessageParser();
 
-	private final Map< Integer, User > users = new HashMap<>();
+	private final Map< Integer, Player > players = new HashMap<>();
 
 	private final ClientListener clientListener;
 
@@ -42,9 +42,9 @@ public class Client {
 		return this.crossnetClient.getConnection().getID();
 	}
 
-	public Map< Integer, User > getUsers() {
-		// When connected, will include all users; i.e. also this Client, not just other users.
-		return this.users;
+	public Map< Integer, Player > getPlayers() {
+		// When connected, will include all players; i.e. also this Client, not just other players.
+		return this.players;
 	}
 
 	public void setName( String name ) {

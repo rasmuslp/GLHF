@@ -1,6 +1,6 @@
 package glhf.server;
 
-import glhf.common.User;
+import glhf.common.Player;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -17,7 +17,7 @@ public class Server {
 
 	private final MessageParser messageParser = new ServerMessageParser();
 
-	private final Map< Integer, User > users = new HashMap<>();
+	private final Map< Integer, Player > players = new HashMap<>();
 
 	private final ServerListener serverListener;
 
@@ -34,8 +34,8 @@ public class Server {
 		this.crossnetServer.bind( port );
 	}
 
-	public Map< Integer, User > getUsers() {
-		return this.users;
+	public Map< Integer, Player > getPlayers() {
+		return this.players;
 	}
 
 	List< Connection > getConnections() {

@@ -1,6 +1,6 @@
 package glhf.common;
 
-public class User {
+public class Player {
 
 	private final int id;
 
@@ -8,7 +8,7 @@ public class User {
 	private boolean isReady = false;
 	private int ping = -1;
 
-	public User( final int id ) {
+	public Player( final int id ) {
 		this.id = id;
 	}
 

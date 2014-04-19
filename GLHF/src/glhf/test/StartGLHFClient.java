@@ -1,7 +1,7 @@
 package glhf.test;
 
 import glhf.client.Client;
-import glhf.common.User;
+import glhf.common.Player;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -32,9 +32,9 @@ public class StartGLHFClient {
 			try {
 				Thread.sleep( 1000 );
 				System.out.println( "-----" );
-				Map< Integer, User > users = client.getUsers();
-				for ( User user : users.values() ) {
-					System.out.println( "User id: " + user.getID() );
+				Map< Integer, Player > players = client.getPlayers();
+				for ( Player player : players.values() ) {
+					System.out.println( "Player id: " + player.getID() );
 				}
 			} catch ( InterruptedException e ) {
 				// TODO Auto-generated catch block

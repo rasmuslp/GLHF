@@ -1,6 +1,6 @@
 package glhf.client;
 
-import glhf.common.User;
+import glhf.common.Player;
 import glhf.message.IdTuple;
 import glhf.message.common.ChatMessage;
 import glhf.message.server.ConnectionChangeMessage;
@@ -29,13 +29,13 @@ public class ClientListener extends ConnectionListenerAdapter {
 	@Override
 	public void connected( Connection connection ) {
 		int id = connection.getID();
-		Map< Integer, User > users = this.client.getUsers();
+		Map< Integer, Player > players = this.client.getPlayers();
 
-		if ( users.containsKey( id ) ) {
-			Log.warn( "GLHF", "Client already had the user with id '" + id + "' in its list." );
+		if ( players.containsKey( id ) ) {
+			Log.warn( "GLHF", "Client already had the player with id '" + id + "' in its list." );
 		}
 
-		users.put( id, new User( id ) );
+		players.put( id, new Player( id ) );
 
 		//TODO Announce connected.
 	}
@@ -43,20 +43,20 @@ public class ClientListener extends ConnectionListenerAdapter {
 	@Override
 	public void disconnected( Connection connection ) {
 		int id = connection.getID();
-		Map< Integer, User > users = this.client.getUsers();
+		Map< Integer, Player > players = this.client.getPlayers();
 
-		if ( !users.containsKey( id ) ) {
-			Log.warn( "GLHF", "Client didn't have the user with id '" + id + "' in its list." );
+		if ( !players.containsKey( id ) ) {
+			Log.warn( "GLHF", "Client didn't have the player with id '" + id + "' in its list." );
 		}
 
-		users.remove( id );
+		players.remove( id );
 
 		//TODO Announce disconnected.
 	}
 
 	@Override
 	public void received( Connection connection, Message message ) {
-		Map< Integer, User > users = this.client.getUsers();
+		Map< Integer, Player > players = this.client.getPlayers();
 
 		if ( message instanceof ChatMessage ) {
 			ChatMessage chatMessage = (ChatMessage) message;
@@ -65,27 +65,27 @@ public class ClientListener extends ConnectionListenerAdapter {
 			//TODO Announce chat
 		} else if ( message instanceof IdsMessage ) {
 			IdsMessage idsMessage = (IdsMessage) message;
-			Set< Integer > currentUserIds = new HashSet<>( idsMessage.getList() );
+			Set< Integer > currentPlayerIds = new HashSet<>( idsMessage.getList() );
 
 			// Remove old
-			users.keySet().retainAll( currentUserIds );
+			players.keySet().retainAll( currentPlayerIds );
 
 			// Add new
-			for ( Integer id : currentUserIds ) {
-				if ( !users.containsKey( id ) ) {
-					users.put( id, new User( id ) );
+			for ( Integer id : currentPlayerIds ) {
+				if ( !players.containsKey( id ) ) {
+					players.put( id, new Player( id ) );
 				}
 			}
 
-			//TODO Announce users changed
+			//TODO Announce players changed
 		} else if ( message instanceof ConnectionChangeMessage ) {
 			ConnectionChangeMessage connectionChangeMessage = (ConnectionChangeMessage) message;
 			int id = connectionChangeMessage.getID();
 
 			if ( connectionChangeMessage.didConnect() ) {
-				users.put( id, new User( id ) );
+				players.put( id, new Player( id ) );
 			} else {
-				users.remove( id );
+				players.remove( id );
 			}
 
 			//TODO Announce change
@@ -94,40 +94,40 @@ public class ClientListener extends ConnectionListenerAdapter {
 
 			for ( IdTuple< String > idName : namesMessage.getList() ) {
 				int id = idName.getId();
-				if ( users.containsKey( id ) ) {
-					users.get( id ).setName( idName.getValue() );
+				if ( players.containsKey( id ) ) {
+					players.get( id ).setName( idName.getValue() );
 				} else {
-					Log.error( "GLHF", "Can't update name for user that isn't there. Id: " + id );
+					Log.error( "GLHF", "Can't update name for player that isn't there. Id: " + id );
 				}
 			}
 
-			//TODO Announce users got new names
+			//TODO Announce players got new names
 		} else if ( message instanceof PingsMessage ) {
 			PingsMessage pingsMessage = (PingsMessage) message;
 
 			for ( IdTuple< Integer > idPing : pingsMessage.getList() ) {
 				int id = idPing.getId();
-				if ( users.containsKey( id ) ) {
-					users.get( id ).setPing( idPing.getValue() );
+				if ( players.containsKey( id ) ) {
+					players.get( id ).setPing( idPing.getValue() );
 				} else {
-					Log.error( "GLHF", "Can't update ping for user that isn't there. Id: " + id );
+					Log.error( "GLHF", "Can't update ping for player that isn't there. Id: " + id );
 				}
 			}
 
-			//TODO Announce users got new ping
+			//TODO Announce players got new ping
 		} else if ( message instanceof ReadysMessage ) {
 			ReadysMessage readysMessage = (ReadysMessage) message;
 
 			for ( IdTuple< Boolean > idReady : readysMessage.getList() ) {
 				int id = idReady.getId();
-				if ( users.containsKey( id ) ) {
-					users.get( id ).setReady( idReady.getValue() );
+				if ( players.containsKey( id ) ) {
+					players.get( id ).setReady( idReady.getValue() );
 				} else {
-					Log.error( "GLHF", "Can't update ready status for user that isn't there. Id: " + id );
+					Log.error( "GLHF", "Can't update ready status for player that isn't there. Id: " + id );
 				}
 			}
 
-			//TODO Announce users got new ready status
+			//TODO Announce players got new ready status
 		}
 	}
 
