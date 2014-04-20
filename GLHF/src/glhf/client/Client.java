@@ -1,7 +1,6 @@
 package glhf.client;
 
 import glhf.common.Player;
-import glhf.common.Players;
 import glhf.message.client.SetNameMessage;
 
 import java.io.IOException;
@@ -16,15 +15,13 @@ public class Client {
 
 	private final MessageParser messageParser = new ClientMessageParser();
 
-	private final ClientListener clientListener;
-
-	private final Players players = new Players();
+	private final ClientConnectionHandler clientConnectionHandler;
 
 	public Client() {
 		this.crossnetClient.getMessageParser().setTieredMessageParser( this.messageParser );
 
-		this.clientListener = new ClientListener( this, this.players );
-		this.crossnetClient.addConnectionListener( this.clientListener );
+		this.clientConnectionHandler = new ClientConnectionHandler();
+		this.crossnetClient.addConnectionListener( this.clientConnectionHandler );
 
 		this.crossnetClient.start( "CrossNet Client" );
 	}
@@ -44,7 +41,7 @@ public class Client {
 
 	public Map< Integer, Player > getPlayers() {
 		// When connected, will include all players; i.e. also this Client, not just other players.
-		return this.players.getPlayers();
+		return this.clientConnectionHandler.getPlayers();
 	}
 
 	public void setName( String name ) {

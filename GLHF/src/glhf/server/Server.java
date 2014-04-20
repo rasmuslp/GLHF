@@ -1,7 +1,6 @@
 package glhf.server;
 
 import glhf.common.Player;
-import glhf.common.Players;
 
 import java.io.IOException;
 import java.util.List;
@@ -17,15 +16,13 @@ public class Server {
 
 	private final MessageParser messageParser = new ServerMessageParser();
 
-	private final ServerListener serverListener;
-
-	private final Players players = new Players();
+	private final ServerConnectionHandler serverConnectionHandler;
 
 	public Server() {
 		this.crossnetServer.getMessageParser().setTieredMessageParser( this.messageParser );
 
-		this.serverListener = new ServerListener( this, this.players );
-		this.crossnetServer.addConnectionListener( this.serverListener );
+		this.serverConnectionHandler = new ServerConnectionHandler( this );
+		this.crossnetServer.addConnectionListener( this.serverConnectionHandler );
 
 		this.crossnetServer.start( "CrossNet Server" );
 	}
@@ -35,7 +32,7 @@ public class Server {
 	}
 
 	public Map< Integer, Player > getPlayers() {
-		return this.players.getPlayers();
+		return this.serverConnectionHandler.getPlayers();
 	}
 
 	List< Connection > getConnections() {

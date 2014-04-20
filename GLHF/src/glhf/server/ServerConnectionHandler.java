@@ -1,7 +1,7 @@
 package glhf.server;
 
 import glhf.common.Player;
-import glhf.common.Players;
+import glhf.common.PlayerHandler;
 import glhf.message.IdTuple;
 import glhf.message.client.SetNameMessage;
 import glhf.message.client.SetReadyMessage;
@@ -16,18 +16,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import crossnet.Connection;
-import crossnet.listener.ConnectionListenerAdapter;
+import crossnet.listener.ConnectionListener;
 import crossnet.message.Message;
 
-public class ServerListener extends ConnectionListenerAdapter {
+public class ServerConnectionHandler extends PlayerHandler< ServerPlayerListener > implements ConnectionListener {
 
 	private final Server server;
 
-	private final Players players;
-
-	public ServerListener( final Server server, final Players players ) {
+	public ServerConnectionHandler( final Server server ) {
 		this.server = server;
-		this.players = players;
 	}
 
 	@Override
@@ -35,7 +32,7 @@ public class ServerListener extends ConnectionListenerAdapter {
 		int id = connection.getID();
 
 		// Store locally.
-		this.players.addPlayer( id );
+		this.addPlayer( id );
 
 		// Send complete ID list to new connection. Along with other available information.
 		List< Integer > idList = new ArrayList<>();
@@ -44,7 +41,7 @@ public class ServerListener extends ConnectionListenerAdapter {
 		int noNotReady = 0;
 		List< IdTuple< Boolean >> readyList = new ArrayList<>();
 		List< IdTuple< Integer >> pingList = new ArrayList<>();
-		for ( Player player : this.players.getPlayers().values() ) {
+		for ( Player player : this.players.values() ) {
 			idList.add( player.getID() );
 			nameList.add( new IdTuple<>( player.getID(), player.getName() ) );
 			readyList.add( new IdTuple<>( player.getID(), player.isReady() ) );
@@ -70,7 +67,7 @@ public class ServerListener extends ConnectionListenerAdapter {
 		int id = connection.getID();
 
 		// Remove from local storage.
-		this.players.removePlayer( id );
+		this.removePlayer( id );
 
 		// Send notification to all other Clients.
 		ConnectionChangeMessage connectionChangeMessage = new ConnectionChangeMessage( id, false );
@@ -84,18 +81,18 @@ public class ServerListener extends ConnectionListenerAdapter {
 		if ( message instanceof ChatMessage ) {
 			ChatMessage chatMessage = (ChatMessage) message;
 			chatMessage.setSenderId( id );
-			Player sender = this.players.get( id );
+			Player sender = this.get( id );
 
 			if ( chatMessage.isPrivate() ) {
-				Player receiver = this.players.get( chatMessage.getReceiverId() );
+				Player receiver = this.get( chatMessage.getReceiverId() );
 				if ( receiver == null ) {
 					// Receiver has left the server
 					return;
 				}
 				//TODO: Get connection to send to receiver
-				this.players.notifyPlayerChatToPlayer( sender, chatMessage.getChat(), receiver );
+				this.notifyPlayerChatPrivate( sender, chatMessage.getChat(), receiver );
 			} else {
-				this.players.notifyPlayerChat( sender, chatMessage.getChat() );
+				this.notifyPlayerChat( sender, chatMessage.getChat() );
 				this.server.sendToAll( chatMessage );
 			}
 		} else if ( message instanceof SetNameMessage ) {
@@ -103,7 +100,7 @@ public class ServerListener extends ConnectionListenerAdapter {
 			String name = setNameMessage.getName();
 
 			// Update local storage.
-			this.players.updateName( id, name );
+			this.updateName( id, name );
 
 			// Send notification to all other Clients.
 			List< IdTuple< String > > nameList = new ArrayList<>();
@@ -114,12 +111,12 @@ public class ServerListener extends ConnectionListenerAdapter {
 			boolean isReady = setReadyMessage.isReady();
 
 			// Update local storage.
-			this.players.updateReady( id, isReady );
+			this.updateReady( id, isReady );
 
 			// Send notification to all other Clients.
 			int noReady = 0;
 			int noNotReady = 0;
-			for ( Player player : this.players.getPlayers().values() ) {
+			for ( Player player : this.players.values() ) {
 				if ( player.isReady() ) {
 					noReady++;
 				} else {
@@ -129,6 +126,35 @@ public class ServerListener extends ConnectionListenerAdapter {
 			List< IdTuple< Boolean > > readyList = new ArrayList<>();
 			readyList.add( new IdTuple<>( id, isReady ) );
 			this.server.sendToAll( new ReadysMessage( noReady, noNotReady, readyList ) );
+		}
+	}
+
+	@Override
+	public void idle( Connection connection ) {
+		// Ignored
+	}
+
+	protected void notifyPlayerChat( Player sender, String chat ) {
+		for ( ServerPlayerListener listener : this.listeners ) {
+			listener.playerChat( sender, chat );
+		}
+	}
+
+	protected void notifyPlayerChatPrivate( Player sender, String chat, Player receiver ) {
+		for ( ServerPlayerListener listener : this.listeners ) {
+			listener.playerChatPrivate( sender, chat, receiver );
+		}
+	}
+
+	protected void notifyServerChat( String chat ) {
+		for ( ServerPlayerListener listener : this.listeners ) {
+			listener.serverChat( chat );
+		}
+	}
+
+	protected void notifyServerChatPrivate( String chat, Player receiver ) {
+		for ( ServerPlayerListener listener : this.listeners ) {
+			listener.serverChatPrivate( chat, receiver );
 		}
 	}
 }
