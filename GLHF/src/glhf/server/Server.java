@@ -3,7 +3,6 @@ package glhf.server;
 import glhf.common.player.Player;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import crossnet.Connection;
@@ -35,7 +34,7 @@ public class Server {
 		return this.serverConnectionHandler.getPlayers();
 	}
 
-	List< Connection > getConnections() {
+	Map< Integer, Connection > getConnections() {
 		return this.crossnetServer.getConnections();
 	}
 

@@ -77,26 +77,30 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 
 	@Override
 	public void received( Connection connection, Message message ) {
-		int id = connection.getID();
+		int senderId = connection.getID();
 
 		if ( message instanceof ChatMessage ) {
 			ChatMessage chatMessage = (ChatMessage) message;
-			chatMessage.setSenderId( id );
+			chatMessage.setSenderId( senderId );
 			String chat = chatMessage.getChat();
-			Player sender = this.players.get( id );
+			int receiverId = chatMessage.getReceiverId();
+
+			// Determine sender
+			Player sender = this.players.get( senderId );
 			if ( sender == null ) {
 				Log.debug( "GLHF", "Chat message from Player who has left the realm. Skipping." );
 				return;
 			}
 
+			// Notify and pass on.
 			if ( chatMessage.isPrivate() ) {
-				Player receiver = this.players.get( chatMessage.getReceiverId() );
+				Player receiver = this.players.get( receiverId );
 				if ( receiver == null ) {
 					Log.debug( "GLHF", "Chat message to Player who has left the realm. Skipping." );
 					return;
 				}
 				this.notifyChat( sender, chat, receiver );
-				//TODO: Get connection to send to receiver
+				this.server.getConnections().get( chatMessage.getReceiverId() ).send( chatMessage );
 			} else {
 				this.notifyChat( sender, chat, null );
 				this.server.sendToAll( chatMessage );
@@ -106,18 +110,18 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 			String name = setNameMessage.getName();
 
 			// Update local storage.
-			this.updateName( id, name );
+			this.updateName( senderId, name );
 
 			// Send notification to all other Clients.
 			List< IdTuple< String > > nameList = new ArrayList<>();
-			nameList.add( new IdTuple<>( id, name ) );
+			nameList.add( new IdTuple<>( senderId, name ) );
 			this.server.sendToAll( new NamesMessage( nameList ) );
 		} else if ( message instanceof SetReadyMessage ) {
 			SetReadyMessage setReadyMessage = (SetReadyMessage) message;
 			boolean isReady = setReadyMessage.isReady();
 
 			// Update local storage.
-			this.updateReady( id, isReady );
+			this.updateReady( senderId, isReady );
 
 			// Send notification to all other Clients.
 			int noReady = 0;
@@ -130,7 +134,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 				}
 			}
 			List< IdTuple< Boolean > > readyList = new ArrayList<>();
-			readyList.add( new IdTuple<>( id, isReady ) );
+			readyList.add( new IdTuple<>( senderId, isReady ) );
 			this.server.sendToAll( new ReadysMessage( noReady, noNotReady, readyList ) );
 		}
 	}
