@@ -1,5 +1,6 @@
 package glhf.client;
 
+import glhf.common.Player;
 import glhf.common.Players;
 import glhf.message.IdTuple;
 import glhf.message.common.ChatMessage;
@@ -37,9 +38,16 @@ public class ClientListener extends ConnectionListenerAdapter {
 	public void received( Connection connection, Message message ) {
 		if ( message instanceof ChatMessage ) {
 			ChatMessage chatMessage = (ChatMessage) message;
-			System.out.println( "CHAT: " + chatMessage.getChatMessage() );
-
-			//TODO Announce chat
+			Player sender = this.players.get( chatMessage.getSenderId() );
+			if ( chatMessage.isPrivate() ) {
+				// Private chat
+				//TODO: Get 
+				Player receiver = this.players.get( chatMessage.getSenderId() );
+				this.players.notifyPlayerChatToPlayer( sender, chatMessage.getChat(), receiver );
+			} else {
+				// Public chat
+				this.players.notifyPlayerChat( sender, chatMessage.getChat() );
+			}
 		} else if ( message instanceof IdsMessage ) {
 			IdsMessage idsMessage = (IdsMessage) message;
 			this.players.updatePlayers( idsMessage.getList() );

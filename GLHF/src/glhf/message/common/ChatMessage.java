@@ -12,34 +12,58 @@ import crossnet.util.ByteArrayWriter;
 
 public class ChatMessage extends GlhfMessage {
 
-	private final int senderId;
+	private int senderId;
 	private final int receiverId;
-	private final String chatMessage;
+	private final String chat;
 
-	public ChatMessage( final int senderId, final int receiverId, final String chatMessage ) {
+	public ChatMessage( final int senderId, final String chatMessage ) {
+		this( senderId, -1, chatMessage );
+	}
+
+	public ChatMessage( final int senderId, final int receiverId, final String chat ) {
 		super( GlhfMessageType.CHAT );
 		this.senderId = senderId;
 		this.receiverId = receiverId;
-		this.chatMessage = chatMessage;
+		this.chat = chat;
+	}
+
+	public boolean isPrivate() {
+		if ( this.receiverId == -1 ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	public boolean isServerMessage() {
+		if ( this.senderId == -1 ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	public int getSenderId() {
 		return this.senderId;
 	}
 
+	public void setSenderId( int id ) {
+		this.senderId = id;
+	}
+
 	public int getReceiverId() {
 		return this.receiverId;
 	}
 
-	public String getChatMessage() {
-		return this.chatMessage;
+	public String getChat() {
+		return this.chat;
 	}
 
 	@Override
 	protected void serializePayload( ByteArrayWriter to ) throws IOException {
 		to.writeInt( this.senderId );
 		to.writeInt( this.receiverId );
-		to.writeByteArray( this.chatMessage.getBytes( Charset.forName( "UTF-8" ) ) );
+		to.writeByteArray( this.chat.getBytes( Charset.forName( "UTF-8" ) ) );
 	}
 
 	/**
@@ -56,8 +80,8 @@ public class ChatMessage extends GlhfMessage {
 			int bytes = payload.bytesAvailable();
 			byte[] data = new byte[bytes];
 			payload.readByteArray( data );
-			String chatMessage = new String( data, Charset.forName( "UTF-8" ) );
-			return new ChatMessage( senderId, receiverId, chatMessage );
+			String chat = new String( data, Charset.forName( "UTF-8" ) );
+			return new ChatMessage( senderId, receiverId, chat );
 		} catch ( IOException e ) {
 			Log.error( "GLHF", "Error deserializing ChatMessage:", e );
 		}

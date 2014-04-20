@@ -20,7 +20,7 @@ public class Player {
 		return this.name;
 	}
 
-	public void setName( String name ) {
+	void setName( String name ) {
 		this.name = name;
 	}
 
@@ -28,7 +28,7 @@ public class Player {
 		return this.isReady;
 	}
 
-	public void setReady( boolean isReady ) {
+	void setReady( boolean isReady ) {
 		this.isReady = isReady;
 	}
 
@@ -36,7 +36,7 @@ public class Player {
 		return this.ping;
 	}
 
-	public void setPing( int ping ) {
+	void setPing( int ping ) {
 		this.ping = ping;
 	}
 

@@ -19,6 +19,15 @@ public class Players {
 		return this.players;
 	}
 
+	@Deprecated
+	public Player get( int id ) {
+		Player player = this.players.get( id );
+		if ( player == null ) {
+			Log.error( "GLHF", "Players didn't have the player with id '" + id + "' in its list. Cannot get." );
+		}
+		return player;
+	}
+
 	public void updatePlayers( List< Integer > ids ) {
 		Set< Integer > newIds = new HashSet<>( ids );
 
@@ -147,6 +156,20 @@ public class Players {
 	private void notifyPlayerUpdated( Player player ) {
 		for ( PlayerListener playerListener : this.playerListeners ) {
 			playerListener.playerUpdated( player );
+		}
+	}
+
+	//TODO: About public
+	public void notifyPlayerChat( Player sender, String chat ) {
+		for ( PlayerListener playerListener : this.playerListeners ) {
+			playerListener.playerChat( sender, chat );
+		}
+	}
+
+	//TODO: About public
+	public void notifyPlayerChatToPlayer( Player sender, String chat, Player receiver ) {
+		for ( PlayerListener playerListener : this.playerListeners ) {
+			playerListener.playerChatToPlayer( sender, chat, receiver );
 		}
 	}
 
