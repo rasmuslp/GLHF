@@ -7,24 +7,15 @@ import java.util.Map;
 
 import crossnet.log.Log;
 
-public class PlayerHandler< T extends PlayerListener > {
+public class PlayerHandler {
 
 	protected final Map< Integer, Player > players = new HashMap<>();
 
-	protected final List< T > listeners = new ArrayList<>();
+	protected final List< PlayerListener > listeners = new ArrayList<>();
 
 	@Deprecated
 	public Map< Integer, Player > getPlayers() {
 		return this.players;
-	}
-
-	@Deprecated
-	protected Player get( int id ) {
-		Player player = this.players.get( id );
-		if ( player == null ) {
-			Log.error( "GLHF", "PlayerHandler didn't have the player with id '" + id + "' in its list. Cannot get." );
-		}
-		return player;
 	}
 
 	protected Player addPlayer( int id ) {
@@ -95,7 +86,7 @@ public class PlayerHandler< T extends PlayerListener > {
 	 * @param listener
 	 *            The listener to add.
 	 */
-	public void addListener( T listener ) {
+	public void addListener( PlayerListener listener ) {
 		if ( listener == null ) {
 			throw new IllegalArgumentException( "Listener cannot be null." );
 		}
@@ -113,7 +104,7 @@ public class PlayerHandler< T extends PlayerListener > {
 	 * @param listener
 	 *            The listener to remove.
 	 */
-	public void removeListener( T listener ) {
+	public void removeListener( PlayerListener listener ) {
 		if ( listener == null ) {
 			throw new IllegalArgumentException( "Listener cannot be null." );
 		}
@@ -122,20 +113,36 @@ public class PlayerHandler< T extends PlayerListener > {
 	}
 
 	protected void notifyConnected( Player player ) {
-		for ( T listener : this.listeners ) {
+		for ( PlayerListener listener : this.listeners ) {
 			listener.connected( player );
 		}
 	}
 
 	protected void notifyDisconnected( Player player ) {
-		for ( T listener : this.listeners ) {
+		for ( PlayerListener listener : this.listeners ) {
 			listener.disconnected( player );
 		}
 	}
 
 	protected void notifyPlayerUpdated( Player player ) {
-		for ( T listener : this.listeners ) {
-			listener.playerUpdated( player );
+		for ( PlayerListener listener : this.listeners ) {
+			listener.updated( player );
+		}
+	}
+
+	/**
+	 * Notify listeners of a chat from sender to receiver.
+	 * 
+	 * @param sender
+	 *            The sender of the message. Iff this is {@code null}, then it is from the {@link Server}..
+	 * @param chat
+	 *            The chat message.
+	 * @param receiver
+	 *            The recipient of the message. Iff this is {@code null}, then it is public.
+	 */
+	protected void notifyChat( Player sender, String chat, Player receiver ) {
+		for ( PlayerListener listener : this.listeners ) {
+			listener.chat( sender, chat, receiver );
 		}
 	}
 

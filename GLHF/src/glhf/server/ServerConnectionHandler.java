@@ -10,16 +10,17 @@ import glhf.common.message.server.NamesMessage;
 import glhf.common.message.server.PingsMessage;
 import glhf.common.message.server.ReadysMessage;
 import glhf.common.player.Player;
-import glhf.server.communication.ServerCommunicationHandler;
+import glhf.common.player.PlayerHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import crossnet.Connection;
 import crossnet.listener.ConnectionListener;
+import crossnet.log.Log;
 import crossnet.message.Message;
 
-public class ServerConnectionHandler extends ServerCommunicationHandler implements ConnectionListener {
+public class ServerConnectionHandler extends PlayerHandler implements ConnectionListener {
 
 	private final Server server;
 
@@ -81,18 +82,23 @@ public class ServerConnectionHandler extends ServerCommunicationHandler implemen
 		if ( message instanceof ChatMessage ) {
 			ChatMessage chatMessage = (ChatMessage) message;
 			chatMessage.setSenderId( id );
-			Player sender = this.get( id );
+			String chat = chatMessage.getChat();
+			Player sender = this.players.get( id );
+			if ( sender == null ) {
+				Log.debug( "GLHF", "Chat message from Player who has left the realm. Skipping." );
+				return;
+			}
 
 			if ( chatMessage.isPrivate() ) {
-				Player receiver = this.get( chatMessage.getReceiverId() );
+				Player receiver = this.players.get( chatMessage.getReceiverId() );
 				if ( receiver == null ) {
-					// Receiver has left the server
+					Log.debug( "GLHF", "Chat message to Player who has left the realm. Skipping." );
 					return;
 				}
+				this.notifyChat( sender, chat, receiver );
 				//TODO: Get connection to send to receiver
-				this.notifyPlayerChatPrivate( sender, chatMessage.getChat(), receiver );
 			} else {
-				this.notifyPlayerChat( sender, chatMessage.getChat() );
+				this.notifyChat( sender, chat, null );
 				this.server.sendToAll( chatMessage );
 			}
 		} else if ( message instanceof SetNameMessage ) {

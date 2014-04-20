@@ -1,6 +1,5 @@
 package glhf.client;
 
-import glhf.client.communication.ClientCommunicationHandler;
 import glhf.common.message.IdTuple;
 import glhf.common.message.common.ChatMessage;
 import glhf.common.message.server.ConnectionChangeMessage;
@@ -9,15 +8,17 @@ import glhf.common.message.server.NamesMessage;
 import glhf.common.message.server.PingsMessage;
 import glhf.common.message.server.ReadysMessage;
 import glhf.common.player.Player;
+import glhf.common.player.PlayerHandler;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import crossnet.Connection;
 import crossnet.listener.ConnectionListener;
+import crossnet.log.Log;
 import crossnet.message.Message;
 
-public class ClientConnectionHandler extends ClientCommunicationHandler implements ConnectionListener {
+public class ClientConnectionHandler extends PlayerHandler implements ConnectionListener {
 
 	@Override
 	public void connected( Connection connection ) {
@@ -34,19 +35,24 @@ public class ClientConnectionHandler extends ClientCommunicationHandler implemen
 		if ( message instanceof ChatMessage ) {
 			ChatMessage chatMessage = (ChatMessage) message;
 			String chat = chatMessage.getChat();
+			Player self = this.players.get( connection.getID() );
 
 			if ( chatMessage.isServerMessage() ) {
 				if ( chatMessage.isPrivate() ) {
-					this.notifyServerChatPrivate( chat );
+					this.notifyChat( null, chat, self );
 				} else {
-					this.notifyServerChat( chat );
+					this.notifyChat( null, chat, null );
 				}
 			} else {
-				Player sender = this.get( chatMessage.getSenderId() );
+				Player sender = this.players.get( chatMessage.getSenderId() );
+				if ( sender == null ) {
+					Log.debug( "GLHF", "Chat message from Player who has left the realm. Skipping." );
+					return;
+				}
 				if ( chatMessage.isPrivate() ) {
-					this.notifyPlayerChatPrivate( sender, chat );
+					this.notifyChat( sender, chat, self );
 				} else {
-					this.notifyPlayerChat( sender, chat );
+					this.notifyChat( sender, chat, null );
 				}
 			}
 		} else if ( message instanceof IdsMessage ) {
