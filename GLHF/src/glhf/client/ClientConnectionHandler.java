@@ -1,14 +1,14 @@
 package glhf.client;
 
-import glhf.common.Player;
-import glhf.common.PlayerHandler;
-import glhf.message.IdTuple;
-import glhf.message.common.ChatMessage;
-import glhf.message.server.ConnectionChangeMessage;
-import glhf.message.server.IdsMessage;
-import glhf.message.server.NamesMessage;
-import glhf.message.server.PingsMessage;
-import glhf.message.server.ReadysMessage;
+import glhf.client.communication.ClientCommunicationHandler;
+import glhf.common.message.IdTuple;
+import glhf.common.message.common.ChatMessage;
+import glhf.common.message.server.ConnectionChangeMessage;
+import glhf.common.message.server.IdsMessage;
+import glhf.common.message.server.NamesMessage;
+import glhf.common.message.server.PingsMessage;
+import glhf.common.message.server.ReadysMessage;
+import glhf.common.player.Player;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +17,7 @@ import crossnet.Connection;
 import crossnet.listener.ConnectionListener;
 import crossnet.message.Message;
 
-public class ClientConnectionHandler extends PlayerHandler< ClientPlayerListener > implements ConnectionListener {
+public class ClientConnectionHandler extends ClientCommunicationHandler implements ConnectionListener {
 
 	@Override
 	public void connected( Connection connection ) {
@@ -100,30 +100,6 @@ public class ClientConnectionHandler extends PlayerHandler< ClientPlayerListener
 	@Override
 	public void idle( Connection connection ) {
 		// Ignored
-	}
-
-	protected void notifyPlayerChat( Player sender, String chat ) {
-		for ( ClientPlayerListener listener : this.listeners ) {
-			listener.playerChat( sender, chat );
-		}
-	}
-
-	protected void notifyPlayerChatPrivate( Player sender, String chat ) {
-		for ( ClientPlayerListener listener : this.listeners ) {
-			listener.playerChatPrivate( sender, chat );
-		}
-	}
-
-	protected void notifyServerChat( String chat ) {
-		for ( ClientPlayerListener listener : this.listeners ) {
-			listener.serverChat( chat );
-		}
-	}
-
-	protected void notifyServerChatPrivate( String chat ) {
-		for ( ClientPlayerListener listener : this.listeners ) {
-			listener.serverChatPrivate( chat );
-		}
 	}
 
 }

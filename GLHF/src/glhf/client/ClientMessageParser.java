@@ -1,12 +1,12 @@
 package glhf.client;
 
-import glhf.message.GlhfMessageType;
-import glhf.message.common.ChatMessage;
-import glhf.message.server.ConnectionChangeMessage;
-import glhf.message.server.IdsMessage;
-import glhf.message.server.NamesMessage;
-import glhf.message.server.PingsMessage;
-import glhf.message.server.ReadysMessage;
+import glhf.common.message.GlhfMessageType;
+import glhf.common.message.common.ChatMessage;
+import glhf.common.message.server.ConnectionChangeMessage;
+import glhf.common.message.server.IdsMessage;
+import glhf.common.message.server.NamesMessage;
+import glhf.common.message.server.PingsMessage;
+import glhf.common.message.server.ReadysMessage;
 import glhf.server.Server;
 import crossnet.log.Log;
 import crossnet.message.AbstractMessageParser;

@@ -1,10 +1,10 @@
 package glhf.test;
 
 import glhf.client.ClientMessageParser;
-import glhf.message.IdTuple;
-import glhf.message.server.IdsMessage;
-import glhf.message.server.NamesMessage;
-import glhf.message.server.ReadysMessage;
+import glhf.common.message.IdTuple;
+import glhf.common.message.server.IdsMessage;
+import glhf.common.message.server.NamesMessage;
+import glhf.common.message.server.ReadysMessage;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 package glhf.client;
 
-import glhf.common.Player;
-import glhf.message.client.SetNameMessage;
+import glhf.common.message.client.SetNameMessage;
+import glhf.common.player.Player;
 
 import java.io.IOException;
 import java.net.InetAddress;

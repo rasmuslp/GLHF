@@ -1,8 +1,8 @@
-package glhf.message.server;
+package glhf.common.message.server;
 
-import glhf.message.GlhfMessageType;
-import glhf.message.IdTuple;
-import glhf.message.ListMessage;
+import glhf.common.message.GlhfMessageType;
+import glhf.common.message.IdTuple;
+import glhf.common.message.ListMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;

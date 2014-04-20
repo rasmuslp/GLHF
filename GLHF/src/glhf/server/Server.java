@@ -1,6 +1,6 @@
 package glhf.server;
 
-import glhf.common.Player;
+import glhf.common.player.Player;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,16 +1,16 @@
 package glhf.server;
 
-import glhf.common.Player;
-import glhf.common.PlayerHandler;
-import glhf.message.IdTuple;
-import glhf.message.client.SetNameMessage;
-import glhf.message.client.SetReadyMessage;
-import glhf.message.common.ChatMessage;
-import glhf.message.server.ConnectionChangeMessage;
-import glhf.message.server.IdsMessage;
-import glhf.message.server.NamesMessage;
-import glhf.message.server.PingsMessage;
-import glhf.message.server.ReadysMessage;
+import glhf.common.message.IdTuple;
+import glhf.common.message.client.SetNameMessage;
+import glhf.common.message.client.SetReadyMessage;
+import glhf.common.message.common.ChatMessage;
+import glhf.common.message.server.ConnectionChangeMessage;
+import glhf.common.message.server.IdsMessage;
+import glhf.common.message.server.NamesMessage;
+import glhf.common.message.server.PingsMessage;
+import glhf.common.message.server.ReadysMessage;
+import glhf.common.player.Player;
+import glhf.server.communication.ServerCommunicationHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import crossnet.Connection;
 import crossnet.listener.ConnectionListener;
 import crossnet.message.Message;
 
-public class ServerConnectionHandler extends PlayerHandler< ServerPlayerListener > implements ConnectionListener {
+public class ServerConnectionHandler extends ServerCommunicationHandler implements ConnectionListener {
 
 	private final Server server;
 
@@ -134,27 +134,4 @@ public class ServerConnectionHandler extends PlayerHandler< ServerPlayerListener
 		// Ignored
 	}
 
-	protected void notifyPlayerChat( Player sender, String chat ) {
-		for ( ServerPlayerListener listener : this.listeners ) {
-			listener.playerChat( sender, chat );
-		}
-	}
-
-	protected void notifyPlayerChatPrivate( Player sender, String chat, Player receiver ) {
-		for ( ServerPlayerListener listener : this.listeners ) {
-			listener.playerChatPrivate( sender, chat, receiver );
-		}
-	}
-
-	protected void notifyServerChat( String chat ) {
-		for ( ServerPlayerListener listener : this.listeners ) {
-			listener.serverChat( chat );
-		}
-	}
-
-	protected void notifyServerChatPrivate( String chat, Player receiver ) {
-		for ( ServerPlayerListener listener : this.listeners ) {
-			listener.serverChatPrivate( chat, receiver );
-		}
-	}
 }

@@ -1,4 +1,4 @@
-package glhf.common;
+package glhf.common.player;
 
 import java.util.ArrayList;
 import java.util.HashMap;

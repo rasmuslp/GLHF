@@ -1,4 +1,4 @@
-package glhf.message;
+package glhf.common.message;
 
 public enum GlhfMessageType {
 

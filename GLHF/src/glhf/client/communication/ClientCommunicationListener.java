@@ -1,9 +1,9 @@
-package glhf.client;
+package glhf.client.communication;
 
-import glhf.common.Player;
-import glhf.common.PlayerListener;
+import glhf.common.player.Player;
+import glhf.common.player.PlayerListener;
 
-public interface ClientPlayerListener extends PlayerListener {
+public interface ClientCommunicationListener extends PlayerListener {
 
 	public void playerChat( Player sender, String chat );
 

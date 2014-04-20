@@ -1,7 +1,7 @@
-package glhf.message.common;
+package glhf.common.message.common;
 
-import glhf.message.GlhfMessage;
-import glhf.message.GlhfMessageType;
+import glhf.common.message.GlhfMessage;
+import glhf.common.message.GlhfMessageType;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

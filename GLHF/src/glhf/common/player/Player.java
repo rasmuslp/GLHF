@@ -1,4 +1,4 @@
-package glhf.common;
+package glhf.common.player;
 
 public class Player {
 

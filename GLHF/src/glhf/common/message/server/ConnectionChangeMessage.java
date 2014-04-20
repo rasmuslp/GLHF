@@ -1,7 +1,7 @@
-package glhf.message.server;
+package glhf.common.message.server;
 
-import glhf.message.GlhfMessage;
-import glhf.message.GlhfMessageType;
+import glhf.common.message.GlhfMessage;
+import glhf.common.message.GlhfMessageType;
 
 import java.io.IOException;
 

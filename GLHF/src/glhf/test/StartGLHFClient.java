@@ -1,7 +1,7 @@
 package glhf.test;
 
 import glhf.client.Client;
-import glhf.common.Player;
+import glhf.common.player.Player;
 
 import java.io.IOException;
 import java.net.InetAddress;

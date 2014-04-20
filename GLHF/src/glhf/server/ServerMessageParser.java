@@ -1,9 +1,9 @@
 package glhf.server;
 
-import glhf.message.GlhfMessageType;
-import glhf.message.client.SetNameMessage;
-import glhf.message.client.SetReadyMessage;
-import glhf.message.common.ChatMessage;
+import glhf.common.message.GlhfMessageType;
+import glhf.common.message.client.SetNameMessage;
+import glhf.common.message.client.SetReadyMessage;
+import glhf.common.message.common.ChatMessage;
 import crossnet.log.Log;
 import crossnet.message.AbstractMessageParser;
 import crossnet.message.Message;

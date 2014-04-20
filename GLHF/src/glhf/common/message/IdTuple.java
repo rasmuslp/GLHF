@@ -1,4 +1,4 @@
-package glhf.message;
+package glhf.common.message;
 
 /**
  * A tuple paring an ID and a type <T>.
