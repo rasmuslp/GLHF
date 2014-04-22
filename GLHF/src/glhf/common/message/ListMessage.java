@@ -3,10 +3,22 @@ package glhf.common.message;
 import java.io.IOException;
 import java.util.List;
 
+import crossnet.message.Message;
 import crossnet.util.ByteArrayWriter;
 
+/**
+ * Abstract implementation of {@link Message} that has a List as as a part of the payload.
+ * 
+ * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
+ * 
+ * @param <T>
+ *            The list payload type.
+ */
 public abstract class ListMessage< T > extends GlhfMessage {
 
+	/**
+	 * The list payload.
+	 */
 	protected final List< T > list;
 
 	public ListMessage( GlhfMessageType glhfMessageType, final List< T > list ) {
@@ -17,6 +29,9 @@ public abstract class ListMessage< T > extends GlhfMessage {
 		this.list = list;
 	}
 
+	/**
+	 * @return The list payload.
+	 */
 	public List< T > getList() {
 		return this.list;
 	}

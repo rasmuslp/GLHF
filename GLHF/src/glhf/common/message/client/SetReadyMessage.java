@@ -9,8 +9,17 @@ import crossnet.log.Log;
 import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
+/**
+ * Sets the ready status for the {@link Client}.
+ * 
+ * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
+ * 
+ */
 public class SetReadyMessage extends GlhfMessage {
 
+	/**
+	 * {@code True} iff ready.
+	 */
 	private final boolean ready;
 
 	public SetReadyMessage( final boolean ready ) {
@@ -18,6 +27,9 @@ public class SetReadyMessage extends GlhfMessage {
 		this.ready = ready;
 	}
 
+	/**
+	 * @return {@code True} iff the {@link Client ready.
+	 */
 	public boolean isReady() {
 		return this.ready;
 	}

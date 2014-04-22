@@ -1,7 +1,7 @@
 package glhf.common.message;
 
 /**
- * A tuple paring an ID and a type <T>.
+ * A tuple of an ID and a type {@code T}.
  * <p>
  * NB: Immutable.
  * 

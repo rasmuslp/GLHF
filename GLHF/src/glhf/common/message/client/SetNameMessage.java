@@ -10,8 +10,17 @@ import crossnet.log.Log;
 import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
+/**
+ * Sets the name for the {@link Client}.
+ * 
+ * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
+ * 
+ */
 public class SetNameMessage extends GlhfMessage {
 
+	/**
+	 * The name of the {@link Client}.
+	 */
 	private final String name;
 
 	public SetNameMessage( final String name ) {
@@ -22,6 +31,9 @@ public class SetNameMessage extends GlhfMessage {
 		this.name = name;
 	}
 
+	/**
+	 * @return The name of the {@link Client}.
+	 */
 	public String getName() {
 		return this.name;
 	}

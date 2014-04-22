@@ -1,5 +1,12 @@
 package glhf.common.message;
 
+
+/**
+ * The various types of {@link GlhfMessage}s.
+ * 
+ * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
+ * 
+ */
 public enum GlhfMessageType {
 
 	// Common
