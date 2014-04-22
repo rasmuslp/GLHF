@@ -6,6 +6,8 @@ public enum GlhfMessageType {
 
 	CHAT,
 
+	DATA,
+
 	// Server Messages
 
 	S_IDS,

@@ -7,6 +7,7 @@ import glhf.common.message.common.ChatMessage;
 import crossnet.log.Log;
 import crossnet.message.AbstractMessageParser;
 import crossnet.message.Message;
+import crossnet.message.crossnet.messages.DataMessage;
 import crossnet.util.ByteArrayReader;
 
 /**
@@ -26,10 +27,15 @@ public class ServerMessageParser extends AbstractMessageParser< GlhfMessageType 
 		Message message = null;
 
 		switch ( glhfMessageType ) {
+		// Common
 			case CHAT:
 				message = ChatMessage.parse( payload );
 				break;
+			case DATA:
+				message = DataMessage.parse( payload );
+				break;
 
+			// Server Messages
 			case S_IDS:
 			case S_CONNECTION_CHANGE:
 			case S_NAMES:
@@ -38,6 +44,7 @@ public class ServerMessageParser extends AbstractMessageParser< GlhfMessageType 
 				Log.error( "GLHF", "Server received Server GlhfMessageType. This makes no sense. Type was: " + glhfMessageType );
 				break;
 
+			// Client Messages
 			case C_READY:
 				message = SetReadyMessage.parse( payload );
 				break;

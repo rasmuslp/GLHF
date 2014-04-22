@@ -13,7 +13,6 @@ public class PlayerHandler {
 
 	protected final List< PlayerListener > listeners = new ArrayList<>();
 
-	@Deprecated
 	public Map< Integer, Player > getPlayers() {
 		return this.players;
 	}
@@ -27,7 +26,6 @@ public class PlayerHandler {
 
 		this.notifyConnected( player );
 
-		//TODO: Should this just be void ?
 		return player;
 	}
 
@@ -134,7 +132,7 @@ public class PlayerHandler {
 	 * Notify listeners of a chat from sender to receiver.
 	 * 
 	 * @param sender
-	 *            The sender of the message. Iff this is {@code null}, then it is from the {@link Server}..
+	 *            The sender of the message. Iff this is {@code null}, then it is from the {@link Server}.
 	 * @param chat
 	 *            The chat message.
 	 * @param receiver

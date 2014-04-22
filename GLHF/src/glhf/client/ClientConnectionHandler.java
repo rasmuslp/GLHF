@@ -20,9 +20,11 @@ import crossnet.message.Message;
 
 public class ClientConnectionHandler extends PlayerHandler implements ConnectionListener {
 
+	private Player self;
+
 	@Override
 	public void connected( Connection connection ) {
-		this.addPlayer( connection.getID() );
+		this.self = this.addPlayer( connection.getID() );
 	}
 
 	@Override
@@ -35,11 +37,10 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 		if ( message instanceof ChatMessage ) {
 			ChatMessage chatMessage = (ChatMessage) message;
 			String chat = chatMessage.getChat();
-			Player self = this.players.get( connection.getID() );
 
 			if ( chatMessage.isServerMessage() ) {
 				if ( chatMessage.isPrivate() ) {
-					this.notifyChat( null, chat, self );
+					this.notifyChat( null, chat, this.self );
 				} else {
 					this.notifyChat( null, chat, null );
 				}
@@ -50,7 +51,7 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 					return;
 				}
 				if ( chatMessage.isPrivate() ) {
-					this.notifyChat( sender, chat, self );
+					this.notifyChat( sender, chat, this.self );
 				} else {
 					this.notifyChat( sender, chat, null );
 				}
@@ -106,6 +107,10 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 	@Override
 	public void idle( Connection connection ) {
 		// Ignored
+	}
+
+	public Player getPlayer() {
+		return this.self;
 	}
 
 }
