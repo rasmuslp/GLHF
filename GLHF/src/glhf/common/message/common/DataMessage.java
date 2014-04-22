@@ -30,6 +30,9 @@ public class DataMessage extends GlhfMessage {
 	 */
 	public DataMessage( final byte[] data ) {
 		super( GlhfMessageType.DATA );
+		if ( data == null ) {
+			throw new IllegalArgumentException( "Data cannot be null." );
+		}
 		this.data = data;
 	}
 

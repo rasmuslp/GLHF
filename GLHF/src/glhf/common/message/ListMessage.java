@@ -11,6 +11,9 @@ public abstract class ListMessage< T > extends GlhfMessage {
 
 	public ListMessage( GlhfMessageType glhfMessageType, final List< T > list ) {
 		super( glhfMessageType );
+		if ( list == null ) {
+			throw new IllegalArgumentException( "List cannot be null." );
+		}
 		this.list = list;
 	}
 

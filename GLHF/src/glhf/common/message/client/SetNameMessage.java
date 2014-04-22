@@ -16,6 +16,9 @@ public class SetNameMessage extends GlhfMessage {
 
 	public SetNameMessage( final String name ) {
 		super( GlhfMessageType.C_NAME );
+		if ( name == null ) {
+			throw new IllegalArgumentException( "Name cannot be null." );
+		}
 		this.name = name;
 	}
 

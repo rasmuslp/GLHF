@@ -13,13 +13,21 @@ import crossnet.message.MessageParser;
 
 public class Server {
 
-	private final crossnet.Server crossnetServer = new crossnet.Server();
+	private final crossnet.Server crossnetServer;
 
 	private final MessageParser messageParser = new ServerMessageParser();
 
 	private final ServerConnectionHandler serverConnectionHandler;
 
 	public Server() {
+		this.crossnetServer = new crossnet.Server() {
+
+			@Override
+			protected Connection newConnection() {
+				return new GlhfConnection();
+			}
+		};
+
 		this.crossnetServer.getMessageParser().setTieredMessageParser( this.messageParser );
 
 		this.serverConnectionHandler = new ServerConnectionHandler( this );

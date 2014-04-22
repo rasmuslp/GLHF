@@ -1,6 +1,10 @@
 package glhf.client;
 
+import glhf.common.message.GlhfMessage;
 import glhf.common.message.client.SetNameMessage;
+import glhf.common.message.client.SetReadyMessage;
+import glhf.common.message.common.ChatMessage;
+import glhf.common.message.common.DataMessage;
 import glhf.common.player.Player;
 import glhf.common.player.PlayerListener;
 
@@ -9,6 +13,7 @@ import java.net.InetAddress;
 import java.util.Map;
 
 import crossnet.listener.ConnectionListener;
+import crossnet.log.Log;
 import crossnet.message.Message;
 import crossnet.message.MessageParser;
 
@@ -58,8 +63,27 @@ public class Client {
 		return this.crossnetClient.getConnection().getID();
 	}
 
-	public void send( Message message ) {
-		this.crossnetClient.getConnection().send( message );
+	public int send( Message message ) {
+		if ( message == null ) {
+			throw new IllegalArgumentException( "Cannot send null." );
+		}
+
+		String messageClass = message.getClass().getSimpleName();
+		boolean wrapped = false;
+		if ( !( message instanceof GlhfMessage ) ) {
+			// Wrap message in DataMessage
+			byte[] messageData = message.getBytes();
+			message = new DataMessage( messageData );
+			wrapped = true;
+		}
+
+		int length = this.crossnetClient.getConnection().send( message );
+		if ( length == 0 ) {
+			Log.trace( "GLHF", "Client had nothing to send." );
+		} else if ( wrapped ) {
+			Log.debug( "GLHF", "Client sent: " + messageClass + " (" + length + ")" );
+		}
+		return length;
 	}
 
 	public void addPlayerListener( PlayerListener listener ) {
@@ -79,9 +103,20 @@ public class Client {
 		return this.clientConnectionHandler.getPlayer();
 	}
 
-	public void setName( String name ) {
-		SetNameMessage setNameMessage = new SetNameMessage( name );
-		this.crossnetClient.getConnection().send( setNameMessage );
+	public void chat( final String chat ) {
+		this.send( new ChatMessage( this.getID(), chat ) );
+	}
+
+	public void chatPrivate( final String chat, final Player receiver ) {
+		this.send( new ChatMessage( this.getID(), receiver.getID(), chat ) );
+	}
+
+	public void setName( final String name ) {
+		this.send( new SetNameMessage( name ) );
+	}
+
+	public void setReady( final boolean isReady ) {
+		this.send( new SetReadyMessage( isReady ) );
 	}
 
 }

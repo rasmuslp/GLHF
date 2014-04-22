@@ -22,6 +22,9 @@ public class ChatMessage extends GlhfMessage {
 
 	public ChatMessage( final int senderId, final int receiverId, final String chat ) {
 		super( GlhfMessageType.CHAT );
+		if ( chat == null ) {
+			throw new IllegalArgumentException( "Chat cannot be null." );
+		}
 		this.senderId = senderId;
 		this.receiverId = receiverId;
 		this.chat = chat;
