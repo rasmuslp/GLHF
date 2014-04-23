@@ -1,18 +1,42 @@
 package glhf.common.player;
 
+/**
+ * Notifies about {@link Player} changes.
+ * 
+ * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
+ * 
+ */
 public interface PlayerListener {
 
+	/**
+	 * New Player connected.
+	 * 
+	 * @param player
+	 *            The new Player.
+	 */
 	public void connected( Player player );
 
+	/**
+	 * Player disconnected.
+	 * 
+	 * @param player
+	 *            The Player that disconnected.
+	 */
 	public void disconnected( Player player );
 
+	/**
+	 * Player attributes changed.
+	 * 
+	 * @param player
+	 *            The player which attributes changed.
+	 */
 	public void updated( Player player );
 
 	/**
 	 * Chat from sender to receiver.
 	 * 
 	 * @param sender
-	 *            The sender of the message. Iff this is {@code null}, then it is from the {@link Server}..
+	 *            The sender of the message. Iff this is {@code null}, then it is from the {@link Server}.
 	 * @param chat
 	 *            The chat message.
 	 * @param receiver

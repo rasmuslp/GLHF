@@ -18,7 +18,7 @@ import crossnet.util.ByteArrayWriter;
 public class ConnectionChangeMessage extends GlhfMessage {
 
 	/**
-	 * The connection ID of the {@link Client}.
+	 * The ID of the {@link Client}.
 	 */
 	private final int id;
 
@@ -42,9 +42,7 @@ public class ConnectionChangeMessage extends GlhfMessage {
 	}
 
 	/**
-	 * Gets the connection ID.
-	 * 
-	 * @return The connection ID.
+	 * @return The {@link Client} ID.
 	 */
 	public int getID() {
 		return this.id;

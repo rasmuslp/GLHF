@@ -15,7 +15,7 @@ import crossnet.util.ByteArrayWriter;
 /**
  * Ready status of relevant {@link Client}s. 'Relevant' may depend on context.
  * <p>
- * NB: This may be partial.
+ * NB: This may be partial within the context.
  * 
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 

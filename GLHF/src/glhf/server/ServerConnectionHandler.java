@@ -20,6 +20,12 @@ import crossnet.listener.ConnectionListener;
 import crossnet.log.Log;
 import crossnet.message.Message;
 
+/**
+ * Handles the {@link Connection}s of the {@link Server}.
+ * 
+ * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
+ * 
+ */
 public class ServerConnectionHandler extends PlayerHandler implements ConnectionListener {
 
 	private final Server server;

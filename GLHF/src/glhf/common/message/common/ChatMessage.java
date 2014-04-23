@@ -2,6 +2,7 @@ package glhf.common.message.common;
 
 import glhf.common.message.GlhfMessage;
 import glhf.common.message.GlhfMessageType;
+import glhf.server.ServerConnectionHandler;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -10,17 +11,55 @@ import crossnet.log.Log;
 import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
+/**
+ * The ChatMessage is for universal chat. It supports private messages; i.e. messages with a specified receiver. And it
+ * supports server messages; i.e. messages without a specified sender.
+ * <p>
+ * NB: The {@link ServerConnectionHandler}, part of the {@link Server}, will fill in the {@link #senderId} for messages
+ * from {@link Client}s automatically.
+ * 
+ * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
+ * 
+ */
 public class ChatMessage extends GlhfMessage {
 
 	private int senderId;
 	private final int receiverId;
 	private final String chat;
 
-	public ChatMessage( final int senderId, final String chatMessage ) {
-		this( senderId, -1, chatMessage );
+	/**
+	 * Create a public chat message.
+	 * 
+	 * @param chat
+	 *            The message.
+	 */
+	public ChatMessage( final String chat ) {
+		this( -1, chat, -1 );
 	}
 
-	public ChatMessage( final int senderId, final int receiverId, final String chat ) {
+	/**
+	 * Create a private chat message.
+	 * 
+	 * @param chat
+	 *            The message.
+	 * @param receiverId
+	 *            The ID of the receiver.
+	 */
+	public ChatMessage( final String chat, final int receiverId ) {
+		this( -1, chat, receiverId );
+	}
+
+	/**
+	 * Creates a chat message.
+	 * 
+	 * @param senderId
+	 *            The ID of the sender.
+	 * @param chat
+	 *            The message.
+	 * @param receiverId
+	 *            The ID of the receiver.
+	 */
+	private ChatMessage( final int senderId, final String chat, final int receiverId ) {
 		super( GlhfMessageType.CHAT );
 		if ( chat == null ) {
 			throw new IllegalArgumentException( "Chat cannot be null." );
@@ -30,6 +69,9 @@ public class ChatMessage extends GlhfMessage {
 		this.chat = chat;
 	}
 
+	/**
+	 * @return {@code True} iff private, false otherwise.
+	 */
 	public boolean isPrivate() {
 		if ( this.receiverId == -1 ) {
 			return false;
@@ -38,6 +80,9 @@ public class ChatMessage extends GlhfMessage {
 		return true;
 	}
 
+	/**
+	 * @return {@code True} iff chat message from server, false otherwise.
+	 */
 	public boolean isServerMessage() {
 		if ( this.senderId == -1 ) {
 			return true;
@@ -46,18 +91,35 @@ public class ChatMessage extends GlhfMessage {
 		return false;
 	}
 
+	/**
+	 * @return The ID of the sender.
+	 */
 	public int getSenderId() {
 		return this.senderId;
 	}
 
+	/**
+	 * Sets the sender ID.
+	 * <p>
+	 * This is used by the {@link Server} when it received a ChatMessage.
+	 * 
+	 * @param id
+	 *            The ID of the sender.
+	 */
 	public void setSenderId( int id ) {
 		this.senderId = id;
 	}
 
+	/**
+	 * @return The ID of the receiver.
+	 */
 	public int getReceiverId() {
 		return this.receiverId;
 	}
 
+	/**
+	 * @return The chat message.
+	 */
 	public String getChat() {
 		return this.chat;
 	}
@@ -84,7 +146,7 @@ public class ChatMessage extends GlhfMessage {
 			byte[] data = new byte[bytes];
 			payload.readByteArray( data );
 			String chat = new String( data, Charset.forName( "UTF-8" ) );
-			return new ChatMessage( senderId, receiverId, chat );
+			return new ChatMessage( senderId, chat, receiverId );
 		} catch ( IOException e ) {
 			Log.error( "GLHF", "Error deserializing ChatMessage:", e );
 		}

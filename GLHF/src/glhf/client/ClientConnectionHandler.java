@@ -18,8 +18,17 @@ import crossnet.listener.ConnectionListener;
 import crossnet.log.Log;
 import crossnet.message.Message;
 
+/**
+ * Handles the {@link Connection} of the {@link Client}.
+ * 
+ * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
+ * 
+ */
 public class ClientConnectionHandler extends PlayerHandler implements ConnectionListener {
 
+	/**
+	 * Reference to the Player objects that constitutes this {@link Client}.
+	 */
 	private Player self;
 
 	@Override
@@ -109,6 +118,9 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 		// Ignored
 	}
 
+	/**
+	 * @return The Player objects that constitutes this {@link Client}.
+	 */
 	public Player getPlayer() {
 		return this.self;
 	}

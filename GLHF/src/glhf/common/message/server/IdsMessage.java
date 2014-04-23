@@ -12,7 +12,7 @@ import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
 /**
- * A list of all relevant {@link Client}s. 'Relevant' may depend on context.
+ * A list of IDs of all relevant {@link Client}s. 'Relevant' may depend on context.
  * 
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 

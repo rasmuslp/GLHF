@@ -7,6 +7,15 @@ import crossnet.log.Log;
 import crossnet.message.Message;
 import crossnet.message.crossnet.CrossNetMessage;
 
+/**
+ * Extension of the CrossNet Connection.
+ * <p>
+ * Overrides the {@link Connection#send(Message)}: If the Message sent is not a {@link GlhfMessage} or a
+ * {@link CrossNetMessage}, it will be wrapped in a {@link DataMessage} for transportation.
+ * 
+ * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
+ * 
+ */
 public class GlhfConnection extends Connection {
 
 	@Override
