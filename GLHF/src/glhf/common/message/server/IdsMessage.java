@@ -1,7 +1,7 @@
 package glhf.common.message.server;
 
+import glhf.common.message.GlhfListMessage;
 import glhf.common.message.GlhfMessageType;
-import glhf.common.message.ListMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import crossnet.util.ByteArrayWriter;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class IdsMessage extends ListMessage< Integer > {
+public class IdsMessage extends GlhfListMessage< Integer > {
 
 	public IdsMessage( List< Integer > list ) {
 		super( GlhfMessageType.S_IDS, list );

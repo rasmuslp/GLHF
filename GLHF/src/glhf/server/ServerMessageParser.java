@@ -27,7 +27,7 @@ public class ServerMessageParser extends AbstractMessageParser< GlhfMessageType 
 		Message message = null;
 
 		switch ( glhfMessageType ) {
-		// Common
+		// Common Messages
 			case CHAT:
 				message = ChatMessage.parse( payload );
 				break;

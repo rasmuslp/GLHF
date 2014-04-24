@@ -1,5 +1,6 @@
 package glhf.server;
 
+import glhf.common.message.GlhfListMessage;
 import glhf.common.message.GlhfMessage;
 import glhf.common.message.common.DataMessage;
 import crossnet.Connection;
@@ -26,7 +27,7 @@ public class GlhfConnection extends Connection {
 
 		String messageClass = message.getClass().getSimpleName();
 		boolean wrapped = false;
-		if ( !( message instanceof GlhfMessage || message instanceof CrossNetMessage ) ) {
+		if ( !( message instanceof GlhfMessage || message instanceof GlhfListMessage || message instanceof CrossNetMessage ) ) {
 			// Wrap message in DataMessage
 			byte[] messageData = message.getBytes();
 			message = new DataMessage( messageData );

@@ -1,8 +1,8 @@
 package glhf.common.message.server;
 
+import glhf.common.message.GlhfListMessage;
 import glhf.common.message.GlhfMessageType;
 import glhf.common.message.IdTuple;
-import glhf.common.message.ListMessage;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -21,7 +21,7 @@ import crossnet.util.ByteArrayWriter;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class NamesMessage extends ListMessage< IdTuple< String > > {
+public class NamesMessage extends GlhfListMessage< IdTuple< String > > {
 
 	public NamesMessage( List< IdTuple< String > > names ) {
 		super( GlhfMessageType.S_NAMES, names );

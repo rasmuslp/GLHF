@@ -1,6 +1,5 @@
 package glhf.common.message;
 
-
 /**
  * The various types of {@link GlhfMessage}s.
  * 
@@ -9,7 +8,7 @@ package glhf.common.message;
  */
 public enum GlhfMessageType {
 
-	// Common
+	// Common Messages
 
 	CHAT,
 

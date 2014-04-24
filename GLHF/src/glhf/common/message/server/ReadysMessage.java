@@ -1,8 +1,8 @@
 package glhf.common.message.server;
 
+import glhf.common.message.GlhfListMessage;
 import glhf.common.message.GlhfMessageType;
 import glhf.common.message.IdTuple;
-import glhf.common.message.ListMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import crossnet.util.ByteArrayWriter;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class ReadysMessage extends ListMessage< IdTuple< Boolean > > {
+public class ReadysMessage extends GlhfListMessage< IdTuple< Boolean > > {
 
 	/**
 	 * Number of ready {@link Client}s.

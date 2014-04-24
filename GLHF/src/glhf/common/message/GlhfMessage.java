@@ -11,8 +11,8 @@ import crossnet.message.Message;
  */
 public abstract class GlhfMessage extends AbstractMessage< GlhfMessageType > {
 
-	public GlhfMessage( GlhfMessageType glhfMessageType ) {
-		super( glhfMessageType );
+	public GlhfMessage( GlhfMessageType messageType ) {
+		super( messageType );
 	}
 
 }

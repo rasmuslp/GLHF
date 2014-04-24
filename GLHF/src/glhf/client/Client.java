@@ -1,5 +1,6 @@
 package glhf.client;
 
+import glhf.common.message.GlhfListMessage;
 import glhf.common.message.GlhfMessage;
 import glhf.common.message.client.SetNameMessage;
 import glhf.common.message.client.SetReadyMessage;
@@ -131,7 +132,7 @@ public class Client {
 
 		String messageClass = message.getClass().getSimpleName();
 		boolean wrapped = false;
-		if ( !( message instanceof GlhfMessage ) ) {
+		if ( !( message instanceof GlhfMessage || message instanceof GlhfListMessage ) ) {
 			// Wrap message in DataMessage
 			byte[] messageData = message.getBytes();
 			message = new DataMessage( messageData );
