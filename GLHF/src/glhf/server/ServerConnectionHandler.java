@@ -150,4 +150,21 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 		// Ignored
 	}
 
+	/**
+	 * Sends all changed ping RTTs to all {@link Player}s.
+	 */
+	public void updatePings() {
+		List< IdTuple< Integer >> pingList = new ArrayList<>();
+		for ( Player player : this.players.values() ) {
+			int id = player.getID();
+			int ping = this.server.getConnections().get( id ).getTransportLayer().getPingRoundTripTime();
+			if ( ping == player.getPing() ) {
+				// If ping is unchanged, skip.
+				continue;
+			}
+			this.updatePing( id, ping );
+			pingList.add( new IdTuple<>( id, ping ) );
+		}
+		this.server.sendToAll( new PingsMessage( pingList ) );
+	}
 }

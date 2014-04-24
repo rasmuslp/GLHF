@@ -39,8 +39,43 @@ public class Server {
 	 * Creates and starts the Server.
 	 */
 	public Server() {
-		// Overrides the Server to use a Connection subclass.
+		// Overrides the Server to use a Connection subclass and piggyback on the update loop.
 		this.crossnetServer = new crossnet.Server() {
+
+			/**
+			 * Timestamp for last run of update piggyback.
+			 */
+			private long updateTimestamp = 0;
+
+			/**
+			 * Maximum time in milliseconds between calls for the update piggyback.
+			 */
+			private int updateMillis = 1000;
+
+			/**
+			 * Sets the maximum time between calls for the update piggyback.
+			 * This can run no faster than the timeout of the CrossNet servers update.
+			 * 
+			 * @param updateMillis
+			 *            Set to -1 to disable.
+			 */
+			public void setUpdate( int updateMillis ) {
+				this.updateMillis = updateMillis;
+			}
+
+			@Override
+			public void update( int timeout ) throws IOException {
+				super.update( timeout );
+
+				if ( this.updateMillis != -1 ) {
+					long time = System.currentTimeMillis();
+					if ( ( this.updateTimestamp + this.updateMillis ) <= time ) {
+						this.updateTimestamp = time;
+						Server.this.updatePiggyBack();
+					}
+				}
+
+			}
 
 			@Override
 			protected Connection newConnection() {
@@ -139,6 +174,13 @@ public class Server {
 	 */
 	void sendToAllExcept( int id, Message message ) {
 		this.crossnetServer.sendToAllExcept( id, message );
+	}
+
+	/**
+	 * Piggy back on the CrossNet Server's update loop.
+	 */
+	void updatePiggyBack() {
+		this.serverConnectionHandler.updatePings();
 	}
 
 	/**
