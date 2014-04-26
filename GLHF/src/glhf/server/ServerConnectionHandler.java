@@ -21,17 +21,17 @@ import crossnet.log.Log;
 import crossnet.message.Message;
 
 /**
- * Handles the {@link Connection}s of the {@link Server}.
+ * Handles the {@link Connection}s of the {@link GlhfServer}.
  * 
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
 public class ServerConnectionHandler extends PlayerHandler implements ConnectionListener {
 
-	private final Server server;
+	private final GlhfServer glhfServer;
 
-	public ServerConnectionHandler( final Server server ) {
-		this.server = server;
+	public ServerConnectionHandler( final GlhfServer glhfServer ) {
+		this.glhfServer = glhfServer;
 	}
 
 	@Override
@@ -66,7 +66,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 
 		// Send notification to all other Clients.
 		ConnectionChangeMessage connectionChangeMessage = new ConnectionChangeMessage( id, true );
-		this.server.sendToAllExcept( id, connectionChangeMessage );
+		this.glhfServer.sendToAllExcept( id, connectionChangeMessage );
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 
 		// Send notification to all other Clients.
 		ConnectionChangeMessage connectionChangeMessage = new ConnectionChangeMessage( id, false );
-		this.server.sendToAllExcept( id, connectionChangeMessage );
+		this.glhfServer.sendToAllExcept( id, connectionChangeMessage );
 	}
 
 	@Override
@@ -106,10 +106,10 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 					return;
 				}
 				this.notifyChat( sender, chat, receiver );
-				this.server.getConnections().get( chatMessage.getReceiverId() ).send( chatMessage );
+				this.glhfServer.getConnections().get( chatMessage.getReceiverId() ).send( chatMessage );
 			} else {
 				this.notifyChat( sender, chat, null );
-				this.server.sendToAll( chatMessage );
+				this.glhfServer.sendToAll( chatMessage );
 			}
 		} else if ( message instanceof SetNameMessage ) {
 			SetNameMessage setNameMessage = (SetNameMessage) message;
@@ -121,7 +121,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 			// Send notification to all other Clients.
 			List< IdTuple< String > > nameList = new ArrayList<>();
 			nameList.add( new IdTuple<>( senderId, name ) );
-			this.server.sendToAll( new NamesMessage( nameList ) );
+			this.glhfServer.sendToAll( new NamesMessage( nameList ) );
 		} else if ( message instanceof SetReadyMessage ) {
 			SetReadyMessage setReadyMessage = (SetReadyMessage) message;
 			boolean isReady = setReadyMessage.isReady();
@@ -141,7 +141,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 			}
 			List< IdTuple< Boolean > > readyList = new ArrayList<>();
 			readyList.add( new IdTuple<>( senderId, isReady ) );
-			this.server.sendToAll( new ReadysMessage( noReady, noNotReady, readyList ) );
+			this.glhfServer.sendToAll( new ReadysMessage( noReady, noNotReady, readyList ) );
 		}
 	}
 
@@ -157,7 +157,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 		List< IdTuple< Integer >> pingList = new ArrayList<>();
 		for ( Player player : this.players.values() ) {
 			int id = player.getID();
-			int ping = this.server.getConnections().get( id ).getTransportLayer().getPingRoundTripTime();
+			int ping = this.glhfServer.getConnections().get( id ).getTransportLayer().getPingRoundTripTime();
 			if ( ping == player.getPing() ) {
 				// If ping is unchanged, skip.
 				continue;
@@ -165,6 +165,6 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 			this.updatePing( id, ping );
 			pingList.add( new IdTuple<>( id, ping ) );
 		}
-		this.server.sendToAll( new PingsMessage( pingList ) );
+		this.glhfServer.sendToAll( new PingsMessage( pingList ) );
 	}
 }

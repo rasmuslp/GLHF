@@ -8,14 +8,14 @@ import glhf.common.message.server.IdsMessage;
 import glhf.common.message.server.NamesMessage;
 import glhf.common.message.server.PingsMessage;
 import glhf.common.message.server.ReadysMessage;
-import glhf.server.Server;
+import glhf.server.GlhfServer;
 import crossnet.log.Log;
 import crossnet.message.AbstractMessageParser;
 import crossnet.message.Message;
 import crossnet.util.ByteArrayReader;
 
 /**
- * Parses {@link Message}s from the {@link Server}.
+ * Parses {@link Message}s from the {@link GlhfServer}.
  * 
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 

@@ -36,7 +36,7 @@ public interface PlayerListener {
 	 * Chat from sender to receiver.
 	 * 
 	 * @param sender
-	 *            The sender of the message. Iff this is {@code null}, then it is from the {@link Server}.
+	 *            The sender of the message. Iff this is {@code null}, then it is from the {@link GlhfServer}.
 	 * @param chat
 	 *            The chat message.
 	 * @param receiver

@@ -15,8 +15,8 @@ import crossnet.util.ByteArrayWriter;
  * The ChatMessage is for universal chat. It supports private messages; i.e. messages with a specified receiver. And it
  * supports server messages; i.e. messages without a specified sender.
  * <p>
- * NB: The {@link ServerConnectionHandler}, part of the {@link Server}, will fill in the {@link #senderId} for messages
- * from {@link Client}s automatically.
+ * NB: The {@link ServerConnectionHandler}, part of the {@link GlhfServer}, will fill in the {@link #senderId} for messages
+ * from {@link GlhfClient}s automatically.
  * 
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
@@ -101,7 +101,7 @@ public class ChatMessage extends GlhfMessage {
 	/**
 	 * Sets the sender ID.
 	 * <p>
-	 * This is used by the {@link Server} when it received a ChatMessage.
+	 * This is used by the {@link GlhfServer} when it received a ChatMessage.
 	 * 
 	 * @param id
 	 *            The ID of the sender.

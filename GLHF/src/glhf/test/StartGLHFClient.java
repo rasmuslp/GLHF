@@ -1,6 +1,6 @@
 package glhf.test;
 
-import glhf.client.Client;
+import glhf.client.GlhfClient;
 import glhf.common.player.Player;
 
 import java.io.IOException;
@@ -16,8 +16,8 @@ public class StartGLHFClient {
 	public static void main( String[] args ) throws UnknownHostException, IOException {
 		Log.set( LogLevel.TRACE );
 
-		Client client = new Client();
-		client.connect( InetAddress.getByName( "localhost" ), 55100 );
+		GlhfClient glhfClient = new GlhfClient();
+		glhfClient.connect( InetAddress.getByName( "localhost" ), 55100 );
 
 		try {
 			Thread.sleep( 200 );
@@ -26,13 +26,13 @@ public class StartGLHFClient {
 			e1.printStackTrace();
 		}
 
-		client.setName( "Cool burger" );
+		glhfClient.setName( "Cool burger" );
 
 		while ( true ) {
 			try {
 				Thread.sleep( 1000 );
 				System.out.println( "-----" );
-				Map< Integer, Player > players = client.getPlayers();
+				Map< Integer, Player > players = glhfClient.getPlayers();
 				for ( Player player : players.values() ) {
 					System.out.println( "Player id: " + player.getID() );
 				}

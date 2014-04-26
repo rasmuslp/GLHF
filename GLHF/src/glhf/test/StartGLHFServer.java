@@ -1,6 +1,6 @@
 package glhf.test;
 
-import glhf.server.Server;
+import glhf.server.GlhfServer;
 
 import java.io.IOException;
 
@@ -12,8 +12,8 @@ public class StartGLHFServer {
 	public static void main( String[] args ) throws IOException {
 		Log.set( LogLevel.TRACE );
 
-		Server server = new Server();
-		server.bind( 55100 );
+		GlhfServer glhfServer = new GlhfServer();
+		glhfServer.bind( 55100 );
 	}
 
 }

@@ -13,7 +13,7 @@ import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
 /**
- * Ready status of relevant {@link Client}s. 'Relevant' may depend on context.
+ * Ready status of relevant {@link GlhfClient}s. 'Relevant' may depend on context.
  * <p>
  * NB: This may be partial within the context.
  * 
@@ -23,12 +23,12 @@ import crossnet.util.ByteArrayWriter;
 public class ReadysMessage extends GlhfListMessage< IdTuple< Boolean > > {
 
 	/**
-	 * Number of ready {@link Client}s.
+	 * Number of ready {@link GlhfClient}s.
 	 */
 	private final int noReady;
 
 	/**
-	 * Number of not ready {@link Client}s.
+	 * Number of not ready {@link GlhfClient}s.
 	 */
 	private final int noNotReady;
 
@@ -39,27 +39,27 @@ public class ReadysMessage extends GlhfListMessage< IdTuple< Boolean > > {
 	}
 
 	/**
-	 * Get the number of ready {@link Client}s.
+	 * Get the number of ready {@link GlhfClient}s.
 	 * 
-	 * @return The number of ready {@link Client}s.
+	 * @return The number of ready {@link GlhfClient}s.
 	 */
 	public int getNoReady() {
 		return this.noReady;
 	}
 
 	/**
-	 * Get the number of not ready {@link Client}s.
+	 * Get the number of not ready {@link GlhfClient}s.
 	 * 
-	 * @return The number of not ready {@link Client}s.
+	 * @return The number of not ready {@link GlhfClient}s.
 	 */
 	public int getNoNotReady() {
 		return this.noNotReady;
 	}
 
 	/**
-	 * Determine if all relevant {@link Client}s are ready.
+	 * Determine if all relevant {@link GlhfClient}s are ready.
 	 * 
-	 * @return {@code True} iff there are no not ready {@link Client}s.
+	 * @return {@code True} iff there are no not ready {@link GlhfClient}s.
 	 */
 	public boolean allReady() {
 		if ( this.noNotReady == 0 ) {

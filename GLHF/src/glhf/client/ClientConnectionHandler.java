@@ -19,7 +19,7 @@ import crossnet.log.Log;
 import crossnet.message.Message;
 
 /**
- * Handles the {@link Connection} of the {@link Client}.
+ * Handles the {@link Connection} of the {@link GlhfClient}.
  * 
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
@@ -27,7 +27,7 @@ import crossnet.message.Message;
 public class ClientConnectionHandler extends PlayerHandler implements ConnectionListener {
 
 	/**
-	 * Reference to the Player objects that constitutes this {@link Client}.
+	 * Reference to the Player objects that constitutes this {@link GlhfClient}.
 	 */
 	private Player self;
 
@@ -119,7 +119,7 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 	}
 
 	/**
-	 * @return The Player objects that constitutes this {@link Client}.
+	 * @return The Player objects that constitutes this {@link GlhfClient}.
 	 */
 	public Player getPlayer() {
 		return this.self;

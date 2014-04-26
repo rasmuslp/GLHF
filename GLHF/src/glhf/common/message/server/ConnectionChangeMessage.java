@@ -10,7 +10,7 @@ import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
 /**
- * This Message announces the connect or disconnect of a {@link Client}.
+ * This Message announces the connect or disconnect of a {@link GlhfClient}.
  * 
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
@@ -18,22 +18,22 @@ import crossnet.util.ByteArrayWriter;
 public class ConnectionChangeMessage extends GlhfMessage {
 
 	/**
-	 * The ID of the {@link Client}.
+	 * The ID of the {@link GlhfClient}.
 	 */
 	private final int id;
 
 	/**
-	 * {@code True} iff the {@link Client} connected, false if it disconnected.
+	 * {@code True} iff the {@link GlhfClient} connected, false if it disconnected.
 	 */
 	private final boolean didConnect;
 
 	/**
-	 * Announces the connection change for a {@link Client}.
+	 * Announces the connection change for a {@link GlhfClient}.
 	 * 
 	 * @param id
-	 *            The ID of the {@link Client} that has changed connection state.
+	 *            The ID of the {@link GlhfClient} that has changed connection state.
 	 * @param didConnect
-	 *            {@code True} iff the {@link Client} connected, false if it disconnected.
+	 *            {@code True} iff the {@link GlhfClient} connected, false if it disconnected.
 	 */
 	public ConnectionChangeMessage( final int id, final boolean didConnect ) {
 		super( GlhfMessageType.S_CONNECTION_CHANGE );
@@ -42,14 +42,14 @@ public class ConnectionChangeMessage extends GlhfMessage {
 	}
 
 	/**
-	 * @return The {@link Client} ID.
+	 * @return The {@link GlhfClient} ID.
 	 */
 	public int getID() {
 		return this.id;
 	}
 
 	/**
-	 * @return {@code True} iff the {@link Client} connected, false if it disconnected.
+	 * @return {@code True} iff the {@link GlhfClient} connected, false if it disconnected.
 	 */
 	public boolean didConnect() {
 		return this.didConnect;

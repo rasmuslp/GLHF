@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Map;
 
+import crossnet.CrossNetClient;
 import crossnet.listener.ConnectionListener;
 import crossnet.log.Log;
 import crossnet.message.Message;
@@ -24,12 +25,12 @@ import crossnet.message.MessageParser;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class Client {
+public class GlhfClient {
 
 	/**
-	 * The underlying CrossNet Client.
+	 * The underlying CrossNetClient.
 	 */
-	private final crossnet.Client crossnetClient = new crossnet.Client();
+	private final CrossNetClient crossNetClient = new CrossNetClient();
 
 	/**
 	 * The GLHF MessageParser.
@@ -44,16 +45,16 @@ public class Client {
 	/**
 	 * Creates and starts the Client.
 	 */
-	public Client() {
+	public GlhfClient() {
 		// Sets the GLHF MessageParser as the tiered parser on the CrossNet parser.
-		this.crossnetClient.getMessageParser().setTieredMessageParser( this.messageParser );
+		this.crossNetClient.getMessageParser().setTieredMessageParser( this.messageParser );
 
 		// Sets the GLHF ConnectionHandler
 		this.clientConnectionHandler = new ClientConnectionHandler();
-		this.crossnetClient.addConnectionListener( this.clientConnectionHandler );
+		this.crossNetClient.addConnectionListener( this.clientConnectionHandler );
 
 		// Starts the Client thread
-		this.crossnetClient.start( "CrossNet Client" );
+		this.crossNetClient.start( "CrossNet Client" );
 	}
 
 	/**
@@ -63,7 +64,7 @@ public class Client {
 	 *            The listener to add.
 	 */
 	public void addConnectionListener( ConnectionListener listener ) {
-		this.crossnetClient.addConnectionListener( listener );
+		this.crossNetClient.addConnectionListener( listener );
 	}
 
 	/**
@@ -73,7 +74,7 @@ public class Client {
 	 *            The listener to remove.
 	 */
 	public void removeConnectionListener( ConnectionListener listener ) {
-		this.crossnetClient.removeConnectionListener( listener );
+		this.crossNetClient.removeConnectionListener( listener );
 	}
 
 	/**
@@ -87,7 +88,7 @@ public class Client {
 	}
 
 	/**
-	 * Connect to a {@link Server}.
+	 * Connect to a {@link GlhfServer}.
 	 * 
 	 * @param host
 	 *            The address.
@@ -97,27 +98,27 @@ public class Client {
 	 *             If the connection could not be opened or the attempt timed out.
 	 */
 	public void connect( InetAddress host, int port ) throws IOException {
-		this.crossnetClient.connect( host, port, 5000 );
+		this.crossNetClient.connect( host, port, 5000 );
 	}
 
 	/**
-	 * Stops the {@link Client} update thread.
+	 * Stops the {@link GlhfClient} update thread.
 	 */
 	public void stop() {
-		this.crossnetClient.stop();
+		this.crossNetClient.stop();
 	}
 
 	/**
-	 * Gets the ID of this. Will be -1 if not properly connected to {@link Server}.
+	 * Gets the ID of this. Will be -1 if not properly connected to {@link GlhfServer}.
 	 * 
 	 * @return The ID of this.
 	 */
 	public int getID() {
-		return this.crossnetClient.getConnection().getID();
+		return this.crossNetClient.getConnection().getID();
 	}
 
 	/**
-	 * Sends a Message to the {@link Server}.
+	 * Sends a Message to the {@link GlhfServer}.
 	 * <p>
 	 * If this is not a {@link GlhfMessage}, it will be wrapped in a {@link DataMessage} for transportation.
 	 * 
@@ -139,7 +140,7 @@ public class Client {
 			wrapped = true;
 		}
 
-		int length = this.crossnetClient.getConnection().send( message );
+		int length = this.crossNetClient.getConnection().send( message );
 		if ( length == 0 ) {
 			Log.trace( "GLHF", "Client had nothing to send." );
 		} else if ( wrapped ) {
@@ -170,7 +171,7 @@ public class Client {
 
 	/**
 	 * Gets the current mapping of IDs to {@link Player}s. Note that this include _all_ Players; i.e. also the one
-	 * represented by this {@link Client}.
+	 * represented by this {@link GlhfClient}.
 	 * <p>
 	 * NB: Do not modify this.
 	 * 
@@ -181,9 +182,9 @@ public class Client {
 	}
 
 	/**
-	 * NB: This will be {@code null} if not connected to a {@link Server}.
+	 * NB: This will be {@code null} if not connected to a {@link GlhfServer}.
 	 * 
-	 * @return The Player that this {@link Client} constitutes.
+	 * @return The Player that this {@link GlhfClient} constitutes.
 	 */
 	public Player getPlayer() {
 		return this.clientConnectionHandler.getPlayer();

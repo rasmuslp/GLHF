@@ -11,7 +11,7 @@ import crossnet.message.Message;
 import crossnet.util.ByteArrayReader;
 
 /**
- * Parses {@link Message}s from the {@link Client}.
+ * Parses {@link Message}s from the {@link GlhfClient}.
  * 
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 

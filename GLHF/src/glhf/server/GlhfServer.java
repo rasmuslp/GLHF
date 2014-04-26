@@ -1,6 +1,6 @@
 package glhf.server;
 
-import glhf.client.Client;
+import glhf.client.GlhfClient;
 import glhf.common.player.Player;
 import glhf.common.player.PlayerListener;
 
@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Map;
 
 import crossnet.Connection;
+import crossnet.CrossNetServer;
 import crossnet.listener.ConnectionListener;
 import crossnet.message.Message;
 import crossnet.message.MessageParser;
@@ -18,12 +19,12 @@ import crossnet.message.MessageParser;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class Server {
+public class GlhfServer {
 
 	/**
 	 * The underlying CrossNet server.
 	 */
-	private final crossnet.Server crossnetServer;
+	private final CrossNetServer crossNetServer;
 
 	/**
 	 * The GLHF MessageParser.
@@ -36,11 +37,11 @@ public class Server {
 	private final ServerConnectionHandler serverConnectionHandler;
 
 	/**
-	 * Creates and starts the Server.
+	 * Creates and starts the GlhfServer.
 	 */
-	public Server() {
+	public GlhfServer() {
 		// Overrides the Server to use a Connection subclass and piggyback on the update loop.
-		this.crossnetServer = new crossnet.Server() {
+		this.crossNetServer = new CrossNetServer() {
 
 			/**
 			 * Timestamp for last run of update piggyback.
@@ -71,7 +72,7 @@ public class Server {
 					long time = System.currentTimeMillis();
 					if ( ( this.updateTimestamp + this.updateMillis ) <= time ) {
 						this.updateTimestamp = time;
-						Server.this.updatePiggyBack();
+						GlhfServer.this.updatePiggyBack();
 					}
 				}
 
@@ -84,14 +85,14 @@ public class Server {
 		};
 
 		// Sets the GLHF MessageParser as the tiered parser on the CrossNet parser.
-		this.crossnetServer.getMessageParser().setTieredMessageParser( this.messageParser );
+		this.crossNetServer.getMessageParser().setTieredMessageParser( this.messageParser );
 
 		// Sets the GLHF ConnectionHandler
 		this.serverConnectionHandler = new ServerConnectionHandler( this );
-		this.crossnetServer.addConnectionListener( this.serverConnectionHandler );
+		this.crossNetServer.addConnectionListener( this.serverConnectionHandler );
 
 		// Starts the Server thread
-		this.crossnetServer.start( "CrossNet Server" );
+		this.crossNetServer.start( "CrossNet Server" );
 	}
 
 	/**
@@ -101,7 +102,7 @@ public class Server {
 	 *            The listener to add.
 	 */
 	public void addConnectionListener( ConnectionListener listener ) {
-		this.crossnetServer.addConnectionListener( listener );
+		this.crossNetServer.addConnectionListener( listener );
 	}
 
 	/**
@@ -111,7 +112,7 @@ public class Server {
 	 *            The listener to remove.
 	 */
 	public void removeConnectionListener( ConnectionListener listener ) {
-		this.crossnetServer.removeConnectionListener( listener );
+		this.crossNetServer.removeConnectionListener( listener );
 	}
 
 	/**
@@ -133,14 +134,14 @@ public class Server {
 	 *             If the server could not bind correctly.
 	 */
 	public void bind( int port ) throws IOException {
-		this.crossnetServer.bind( port );
+		this.crossNetServer.bind( port );
 	}
 
 	/**
-	 * Stops the {@link Server} update thread.
+	 * Stops the {@link GlhfServer} update thread.
 	 */
 	public void stop() {
-		this.crossnetServer.stop();
+		this.crossNetServer.stop();
 	}
 
 	/**
@@ -151,21 +152,21 @@ public class Server {
 	 * @return The current mapping of IDs to {@link Connection}s.
 	 */
 	Map< Integer, Connection > getConnections() {
-		return this.crossnetServer.getConnections();
+		return this.crossNetServer.getConnections();
 	}
 
 	/**
-	 * Send a Message to all connected {@link Client}s.
+	 * Send a Message to all connected {@link GlhfClient}s.
 	 * 
 	 * @param message
 	 *            The Message to send.
 	 */
 	void sendToAll( Message message ) {
-		this.crossnetServer.sendToAll( message );
+		this.crossNetServer.sendToAll( message );
 	}
 
 	/**
-	 * Send a Message to all connected {@link Client}s, except for the one with ID.
+	 * Send a Message to all connected {@link GlhfClient}s, except for the one with ID.
 	 * 
 	 * @param id
 	 *            The ID to skip.
@@ -173,7 +174,7 @@ public class Server {
 	 *            The Message to send.
 	 */
 	void sendToAllExcept( int id, Message message ) {
-		this.crossnetServer.sendToAllExcept( id, message );
+		this.crossNetServer.sendToAllExcept( id, message );
 	}
 
 	/**

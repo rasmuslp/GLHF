@@ -1,7 +1,7 @@
 package glhf.common.player;
 
 /**
- * The Player is an abstraction of a {@link Client} connected to a {@link Server}, that is represented on both ends.
+ * The Player is an abstraction of a {@link GlhfClient} connected to a {@link GlhfServer}, that is represented on both ends.
  * 
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 

@@ -14,7 +14,7 @@ import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
 /**
- * Names of relevant {@link Client}s. 'Relevant' may depend on context.
+ * Names of relevant {@link GlhfClient}s. 'Relevant' may depend on context.
  * <p>
  * NB: This may be partial within the context.
  * 

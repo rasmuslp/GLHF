@@ -10,7 +10,7 @@ import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
 /**
- * Sets the ready status for the {@link Client}.
+ * Sets the ready status for the {@link GlhfClient}.
  * 
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
@@ -28,7 +28,7 @@ public class SetReadyMessage extends GlhfMessage {
 	}
 
 	/**
-	 * @return {@code True} iff the {@link Client ready.
+	 * @return {@code True} iff the {@link GlhfClient ready.
 	 */
 	public boolean isReady() {
 		return this.ready;
