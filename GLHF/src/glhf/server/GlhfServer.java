@@ -152,7 +152,7 @@ public class GlhfServer {
 	 * 
 	 * @return The current mapping of IDs to {@link Connection}s.
 	 */
-	Map< Integer, Connection > getConnections() {
+	public Map< Integer, Connection > getConnections() {
 		return this.crossNetServer.getConnections();
 	}
 
@@ -162,7 +162,7 @@ public class GlhfServer {
 	 * @param message
 	 *            The Message to send.
 	 */
-	void sendToAll( Message message ) {
+	public void sendToAll( Message message ) {
 		this.crossNetServer.sendToAll( message );
 	}
 
@@ -174,7 +174,7 @@ public class GlhfServer {
 	 * @param message
 	 *            The Message to send.
 	 */
-	void sendToAllExcept( int id, Message message ) {
+	public void sendToAllExcept( int id, Message message ) {
 		this.crossNetServer.sendToAllExcept( id, message );
 	}
 
