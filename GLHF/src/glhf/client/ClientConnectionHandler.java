@@ -1,5 +1,7 @@
 package glhf.client;
 
+import glhf.common.message.GlhfListMessage;
+import glhf.common.message.GlhfMessage;
 import glhf.common.message.IdTuple;
 import glhf.common.message.common.ChatMessage;
 import glhf.common.message.server.ConnectionChangeMessage;
@@ -111,7 +113,7 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 			for ( IdTuple< Boolean > idReady : readysMessage.getList() ) {
 				this.updateReady( idReady.getId(), idReady.getValue() );
 			}
-		} else if ( !( message instanceof CrossNetMessage ) ) {
+		} else if ( ( message instanceof GlhfMessage || message instanceof GlhfListMessage ) && !( message instanceof CrossNetMessage ) ) {
 			Log.warn( "GLHF", "Got unexpected Message Type: " + message.getClass().getSimpleName() );
 		}
 	}

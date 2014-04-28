@@ -1,5 +1,7 @@
 package glhf.server;
 
+import glhf.common.message.GlhfListMessage;
+import glhf.common.message.GlhfMessage;
 import glhf.common.message.IdTuple;
 import glhf.common.message.client.SetNameMessage;
 import glhf.common.message.client.SetReadyMessage;
@@ -143,7 +145,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 			List< IdTuple< Boolean > > readyList = new ArrayList<>();
 			readyList.add( new IdTuple<>( senderId, isReady ) );
 			this.glhfServer.sendToAll( new ReadysMessage( noReady, noNotReady, readyList ) );
-		} else if ( !( message instanceof CrossNetMessage ) ) {
+		} else if ( ( message instanceof GlhfMessage || message instanceof GlhfListMessage ) && !( message instanceof CrossNetMessage ) ) {
 			Log.warn( "GLHF", "Got unexpected Message Type: " + message.getClass().getSimpleName() );
 		}
 	}
