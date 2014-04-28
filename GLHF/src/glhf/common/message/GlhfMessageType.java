@@ -8,12 +8,6 @@ package glhf.common.message;
  */
 public enum GlhfMessageType {
 
-	// Common Messages
-
-	CHAT,
-
-	DATA,
-
 	// Server Messages
 
 	S_IDS,
@@ -31,5 +25,11 @@ public enum GlhfMessageType {
 	C_NAME,
 
 	C_READY,
+
+	// Common Messages
+
+	CHAT,
+
+	DATA,
 
 }

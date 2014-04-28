@@ -17,6 +17,7 @@ import crossnet.Connection;
 import crossnet.listener.ConnectionListener;
 import crossnet.log.Log;
 import crossnet.message.Message;
+import crossnet.message.crossnet.CrossNetMessage;
 
 /**
  * Handles the {@link Connection} of the {@link GlhfClient}.
@@ -110,6 +111,8 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 			for ( IdTuple< Boolean > idReady : readysMessage.getList() ) {
 				this.updateReady( idReady.getId(), idReady.getValue() );
 			}
+		} else if ( !( message instanceof CrossNetMessage ) ) {
+			Log.warn( "GLHF", "Got unexpected Message Type: " + message.getClass().getSimpleName() );
 		}
 	}
 

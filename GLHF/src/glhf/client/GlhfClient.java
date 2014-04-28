@@ -2,12 +2,14 @@ package glhf.client;
 
 import glhf.common.message.GlhfListMessage;
 import glhf.common.message.GlhfMessage;
+import glhf.common.message.GlhfMessageParser;
 import glhf.common.message.client.SetNameMessage;
 import glhf.common.message.client.SetReadyMessage;
 import glhf.common.message.common.ChatMessage;
 import glhf.common.message.common.DataMessage;
 import glhf.common.player.Player;
 import glhf.common.player.PlayerListener;
+import glhf.server.GlhfServer;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -35,7 +37,7 @@ public class GlhfClient {
 	/**
 	 * The GLHF MessageParser.
 	 */
-	private final MessageParser messageParser = new ClientMessageParser();
+	private final MessageParser messageParser = new GlhfMessageParser();
 
 	/**
 	 * The ConnectionHandler.

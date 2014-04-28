@@ -1,6 +1,6 @@
 package glhf.test;
 
-import glhf.client.ClientMessageParser;
+import glhf.common.message.GlhfMessageParser;
 import glhf.common.message.IdTuple;
 import glhf.common.message.server.IdsMessage;
 import glhf.common.message.server.NamesMessage;
@@ -11,13 +11,14 @@ import java.util.List;
 
 import crossnet.log.Log;
 import crossnet.log.LogLevel;
+import crossnet.message.MessageParser;
 import crossnet.util.CrossNetUtil;
 
 public class Testing {
 
 	public static void main( String[] args ) {
 		Log.set( LogLevel.TRACE );
-		ClientMessageParser clientMessageParser = new ClientMessageParser();
+		MessageParser clientMessageParser = new GlhfMessageParser();
 
 		// -- NamesMessage
 		List< IdTuple< String > > namesList = new ArrayList<>();

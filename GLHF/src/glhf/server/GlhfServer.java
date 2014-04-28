@@ -1,6 +1,7 @@
 package glhf.server;
 
 import glhf.client.GlhfClient;
+import glhf.common.message.GlhfMessageParser;
 import glhf.common.player.Player;
 import glhf.common.player.PlayerListener;
 
@@ -29,7 +30,7 @@ public class GlhfServer {
 	/**
 	 * The GLHF MessageParser.
 	 */
-	private final MessageParser messageParser = new ServerMessageParser();
+	private final MessageParser messageParser = new GlhfMessageParser();
 
 	/**
 	 * The ConnectionHandler.
