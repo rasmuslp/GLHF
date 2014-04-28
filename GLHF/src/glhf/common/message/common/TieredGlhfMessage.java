@@ -15,7 +15,7 @@ import crossnet.util.ByteArrayWriter;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class DataMessage extends GlhfMessage {
+public class TieredGlhfMessage extends GlhfMessage {
 
 	/**
 	 * The payload.
@@ -23,13 +23,13 @@ public class DataMessage extends GlhfMessage {
 	private final byte[] data;
 
 	/**
-	 * Create a new DataMessage with a payload.
+	 * Create a new TieredGlhfMessage with a payload.
 	 * 
 	 * @param data
 	 *            The payload.
 	 */
-	public DataMessage( final byte[] data ) {
-		super( GlhfMessageType.DATA );
+	public TieredGlhfMessage( final byte[] data ) {
+		super( GlhfMessageType.TIERED );
 		if ( data == null ) {
 			throw new IllegalArgumentException( "Data cannot be null." );
 		}
@@ -51,20 +51,20 @@ public class DataMessage extends GlhfMessage {
 	}
 
 	/**
-	 * Construct a DataMessage from the provided payload.
+	 * Construct a TieredGlhfMessage from the provided payload.
 	 * 
 	 * @param payload
 	 *            The payload from which to determine the content of this.
-	 * @return A freshly parsed DataMessage.
+	 * @return A freshly parsed TieredGlhfMessage.
 	 */
-	public static DataMessage parse( ByteArrayReader payload ) {
+	public static TieredGlhfMessage parse( ByteArrayReader payload ) {
 		try {
 			int bytes = payload.bytesAvailable();
 			byte[] data = new byte[bytes];
 			payload.readByteArray( data );
-			return new DataMessage( data );
+			return new TieredGlhfMessage( data );
 		} catch ( IOException e ) {
-			Log.error( "GLHF", "Error deserializing DataMessage:", e );
+			Log.error( "GLHF", "Error deserializing TieredGlhfMessage:", e );
 		}
 
 		return null;

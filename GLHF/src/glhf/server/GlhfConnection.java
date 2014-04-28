@@ -2,7 +2,7 @@ package glhf.server;
 
 import glhf.common.message.GlhfListMessage;
 import glhf.common.message.GlhfMessage;
-import glhf.common.message.common.DataMessage;
+import glhf.common.message.common.TieredGlhfMessage;
 import crossnet.Connection;
 import crossnet.log.Log;
 import crossnet.message.Message;
@@ -12,7 +12,7 @@ import crossnet.message.crossnet.CrossNetMessage;
  * Extension of the CrossNet Connection.
  * <p>
  * Overrides the {@link Connection#send(Message)}: If the Message sent is not a {@link GlhfMessage} or a
- * {@link CrossNetMessage}, it will be wrapped in a {@link DataMessage} for transportation.
+ * {@link CrossNetMessage}, it will be wrapped in a {@link TieredGlhfMessage} for transportation.
  * 
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
@@ -28,9 +28,9 @@ public class GlhfConnection extends Connection {
 		String messageClass = message.getClass().getSimpleName();
 		boolean wrapped = false;
 		if ( !( message instanceof GlhfMessage || message instanceof GlhfListMessage || message instanceof CrossNetMessage ) ) {
-			// Wrap message in DataMessage
+			// Wrap message in TieredGlhfMessage
 			byte[] messageData = message.getBytes();
-			message = new DataMessage( messageData );
+			message = new TieredGlhfMessage( messageData );
 			wrapped = true;
 		}
 

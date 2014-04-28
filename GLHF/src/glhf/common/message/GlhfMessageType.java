@@ -30,6 +30,6 @@ public enum GlhfMessageType {
 
 	CHAT,
 
-	DATA,
+	TIERED,
 
 }

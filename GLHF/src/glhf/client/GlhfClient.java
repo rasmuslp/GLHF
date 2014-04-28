@@ -6,7 +6,7 @@ import glhf.common.message.GlhfMessageParser;
 import glhf.common.message.client.SetNameMessage;
 import glhf.common.message.client.SetReadyMessage;
 import glhf.common.message.common.ChatMessage;
-import glhf.common.message.common.DataMessage;
+import glhf.common.message.common.TieredGlhfMessage;
 import glhf.common.player.Player;
 import glhf.common.player.PlayerListener;
 import glhf.server.GlhfServer;
@@ -122,7 +122,7 @@ public class GlhfClient {
 	/**
 	 * Sends a Message to the {@link GlhfServer}.
 	 * <p>
-	 * If this is not a {@link GlhfMessage}, it will be wrapped in a {@link DataMessage} for transportation.
+	 * If this is not a {@link GlhfMessage}, it will be wrapped in a {@link TieredGlhfMessage} for transportation.
 	 * 
 	 * @param message
 	 *            The Message to send.
@@ -136,9 +136,9 @@ public class GlhfClient {
 		String messageClass = message.getClass().getSimpleName();
 		boolean wrapped = false;
 		if ( !( message instanceof GlhfMessage || message instanceof GlhfListMessage ) ) {
-			// Wrap message in DataMessage
+			// Wrap message in TieredGlhfMessage
 			byte[] messageData = message.getBytes();
-			message = new DataMessage( messageData );
+			message = new TieredGlhfMessage( messageData );
 			wrapped = true;
 		}
 
