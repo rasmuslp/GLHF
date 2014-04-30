@@ -1,11 +1,12 @@
 package glhf.common.message.common;
 
+import glhf.client.GlhfClient;
 import glhf.common.message.GlhfMessage;
 import glhf.common.message.GlhfMessageType;
+import glhf.server.GlhfServer;
 import glhf.server.ServerConnectionHandler;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 import crossnet.log.Log;
 import crossnet.util.ByteArrayReader;
@@ -15,8 +16,8 @@ import crossnet.util.ByteArrayWriter;
  * The ChatMessage is for universal chat. It supports private messages; i.e. messages with a specified receiver. And it
  * supports server messages; i.e. messages without a specified sender.
  * <p>
- * NB: The {@link ServerConnectionHandler}, part of the {@link GlhfServer}, will fill in the {@link #senderId} for messages
- * from {@link GlhfClient}s automatically.
+ * NB: The {@link ServerConnectionHandler}, part of the {@link GlhfServer}, will fill in the {@link #senderId} for
+ * messages from {@link GlhfClient}s automatically.
  * 
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
@@ -128,7 +129,7 @@ public class ChatMessage extends GlhfMessage {
 	protected void serializePayload( ByteArrayWriter to ) throws IOException {
 		to.writeInt( this.senderId );
 		to.writeInt( this.receiverId );
-		to.writeByteArray( this.chat.getBytes( Charset.forName( "UTF-8" ) ) );
+		to.writeString255( this.chat );
 	}
 
 	/**
@@ -142,10 +143,7 @@ public class ChatMessage extends GlhfMessage {
 		try {
 			int senderId = payload.readInt();
 			int receiverId = payload.readInt();
-			int bytes = payload.bytesAvailable();
-			byte[] data = new byte[bytes];
-			payload.readByteArray( data );
-			String chat = new String( data, Charset.forName( "UTF-8" ) );
+			String chat = payload.readString255();
 			return new ChatMessage( senderId, chat, receiverId );
 		} catch ( IOException e ) {
 			Log.error( "GLHF", "Error deserializing ChatMessage:", e );

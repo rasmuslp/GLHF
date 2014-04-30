@@ -1,10 +1,10 @@
 package glhf.common.message.client;
 
+import glhf.client.GlhfClient;
 import glhf.common.message.GlhfMessage;
 import glhf.common.message.GlhfMessageType;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 
 import crossnet.log.Log;
 import crossnet.util.ByteArrayReader;
@@ -40,7 +40,7 @@ public class SetNameMessage extends GlhfMessage {
 
 	@Override
 	protected void serializePayload( ByteArrayWriter to ) throws IOException {
-		to.writeByteArray( this.name.getBytes( Charset.forName( "UTF-8" ) ) );
+		to.writeString255( this.name );
 	}
 
 	/**
@@ -52,10 +52,7 @@ public class SetNameMessage extends GlhfMessage {
 	 */
 	public static SetNameMessage parse( ByteArrayReader payload ) {
 		try {
-			int bytes = payload.bytesAvailable();
-			byte[] data = new byte[bytes];
-			payload.readByteArray( data );
-			String name = new String( data, Charset.forName( "UTF-8" ) );
+			String name = payload.readString255();
 			return new SetNameMessage( name );
 		} catch ( IOException e ) {
 			Log.error( "GLHF", "Error deserializing SetNameMessage:", e );

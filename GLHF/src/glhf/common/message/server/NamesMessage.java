@@ -1,11 +1,11 @@
 package glhf.common.message.server;
 
+import glhf.client.GlhfClient;
 import glhf.common.message.GlhfListMessage;
 import glhf.common.message.GlhfMessageType;
 import glhf.common.message.IdTuple;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,9 +36,7 @@ public class NamesMessage extends GlhfListMessage< IdTuple< String > > {
 	protected void serializeListObject( int atIndex, ByteArrayWriter to ) throws IOException {
 		IdTuple< String > idTuple = this.list.get( atIndex );
 		to.writeInt( idTuple.getId() );
-		byte[] name = idTuple.getValue().getBytes( Charset.forName( "UTF-8" ) );
-		to.writeByte( name.length );
-		to.writeByteArray( name );
+		to.writeString255( idTuple.getValue() );
 	}
 
 	/**
@@ -54,10 +52,7 @@ public class NamesMessage extends GlhfListMessage< IdTuple< String > > {
 			int count = payload.readInt();
 			for ( int i = 0; i < count; i++ ) {
 				int id = payload.readInt();
-				int nameLength = payload.readUnsignedByte();
-				byte[] nameBytes = new byte[nameLength];
-				payload.readByteArray( nameBytes );
-				String name = new String( nameBytes, Charset.forName( "UTF-8" ) );
+				String name = payload.readString255();
 				tuples.add( new IdTuple<>( id, name ) );
 			}
 			return new NamesMessage( tuples );
