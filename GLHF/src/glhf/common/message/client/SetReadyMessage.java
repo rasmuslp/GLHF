@@ -1,5 +1,6 @@
 package glhf.common.message.client;
 
+import glhf.client.GlhfClient;
 import glhf.common.message.GlhfMessage;
 import glhf.common.message.GlhfMessageType;
 
@@ -28,7 +29,7 @@ public class SetReadyMessage extends GlhfMessage {
 	}
 
 	/**
-	 * @return {@code True} iff the {@link GlhfClient ready.
+	 * @return {@code True} iff the {@link GlhfClient} ready.
 	 */
 	public boolean isReady() {
 		return this.ready;

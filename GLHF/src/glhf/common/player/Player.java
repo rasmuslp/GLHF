@@ -1,7 +1,12 @@
 package glhf.common.player;
 
+import glhf.client.GlhfClient;
+import glhf.server.GlhfServer;
+import crossnet.Connection;
+
 /**
- * The Player is an abstraction of a {@link GlhfClient} connected to a {@link GlhfServer}, that is represented on both ends.
+ * The Player is an abstraction of a {@link GlhfClient} connected to a {@link GlhfServer}, that is represented on both
+ * ends.
  * 
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 

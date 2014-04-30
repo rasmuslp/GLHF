@@ -1,5 +1,6 @@
 package glhf.common.message.server;
 
+import glhf.client.GlhfClient;
 import glhf.common.message.GlhfMessage;
 import glhf.common.message.GlhfMessageType;
 

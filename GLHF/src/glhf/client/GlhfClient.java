@@ -135,7 +135,7 @@ public class GlhfClient {
 
 		String messageClass = message.getClass().getSimpleName();
 		boolean wrapped = false;
-		if ( !( message instanceof GlhfMessage || message instanceof GlhfListMessage ) ) {
+		if ( !( ( message instanceof GlhfMessage ) || ( message instanceof GlhfListMessage ) ) ) {
 			// Wrap message in TieredGlhfMessage
 			byte[] messageData = message.getBytes();
 			message = new TieredGlhfMessage( messageData );

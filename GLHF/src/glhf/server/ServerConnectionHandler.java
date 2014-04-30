@@ -145,7 +145,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 			List< IdTuple< Boolean > > readyList = new ArrayList<>();
 			readyList.add( new IdTuple<>( senderId, isReady ) );
 			this.glhfServer.sendToAll( new ReadysMessage( noReady, noNotReady, readyList ) );
-		} else if ( ( message instanceof GlhfMessage || message instanceof GlhfListMessage ) && !( message instanceof CrossNetMessage ) ) {
+		} else if ( ( ( message instanceof GlhfMessage ) || ( message instanceof GlhfListMessage ) ) && !( message instanceof CrossNetMessage ) ) {
 			Log.warn( "GLHF", "Got unexpected Message Type: " + message.getClass().getSimpleName() );
 		}
 	}

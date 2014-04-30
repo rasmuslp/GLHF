@@ -1,5 +1,7 @@
 package glhf.common.player;
 
+import glhf.server.GlhfServer;
+
 /**
  * Notifies about {@link Player} changes.
  * 

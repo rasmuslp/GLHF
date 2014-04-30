@@ -27,7 +27,7 @@ public class GlhfConnection extends Connection {
 
 		String messageClass = message.getClass().getSimpleName();
 		boolean wrapped = false;
-		if ( !( message instanceof GlhfMessage || message instanceof GlhfListMessage || message instanceof CrossNetMessage ) ) {
+		if ( !( ( message instanceof GlhfMessage ) || ( message instanceof GlhfListMessage ) || ( message instanceof CrossNetMessage ) ) ) {
 			// Wrap message in TieredGlhfMessage
 			byte[] messageData = message.getBytes();
 			message = new TieredGlhfMessage( messageData );

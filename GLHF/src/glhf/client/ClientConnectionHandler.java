@@ -113,7 +113,7 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 			for ( IdTuple< Boolean > idReady : readysMessage.getList() ) {
 				this.updateReady( idReady.getId(), idReady.getValue() );
 			}
-		} else if ( ( message instanceof GlhfMessage || message instanceof GlhfListMessage ) && !( message instanceof CrossNetMessage ) ) {
+		} else if ( ( ( message instanceof GlhfMessage ) || ( message instanceof GlhfListMessage ) ) && !( message instanceof CrossNetMessage ) ) {
 			Log.warn( "GLHF", "Got unexpected Message Type: " + message.getClass().getSimpleName() );
 		}
 	}
