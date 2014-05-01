@@ -126,7 +126,7 @@ public class ChatMessage extends GlhfMessage {
 	}
 
 	@Override
-	protected void serializePayload( ByteArrayWriter to ) throws IOException {
+	protected void serializeGlhfPayload( ByteArrayWriter to ) throws IOException {
 		to.writeInt( this.senderId );
 		to.writeInt( this.receiverId );
 		to.writeString255( this.chat );

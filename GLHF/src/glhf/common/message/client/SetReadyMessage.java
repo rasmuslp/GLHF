@@ -36,7 +36,7 @@ public class SetReadyMessage extends GlhfMessage {
 	}
 
 	@Override
-	protected void serializePayload( ByteArrayWriter to ) throws IOException {
+	protected void serializeGlhfPayload( ByteArrayWriter to ) throws IOException {
 		to.writeBoolean( this.ready );
 	}
 

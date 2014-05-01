@@ -12,6 +12,7 @@ import java.util.List;
 import crossnet.log.Log;
 import crossnet.log.LogLevel;
 import crossnet.message.MessageParser;
+import crossnet.util.ByteArrayReader;
 import crossnet.util.CrossNetUtil;
 
 public class Testing {
@@ -30,7 +31,7 @@ public class Testing {
 
 		System.out.println( CrossNetUtil.bytesToHex( namesBytes ) );
 
-		NamesMessage namesMessageParsed = (NamesMessage) clientMessageParser.parseData( namesBytes );
+		NamesMessage namesMessageParsed = (NamesMessage) clientMessageParser.parseData( new ByteArrayReader( namesBytes ) );
 		for ( IdTuple< String > idTuple : namesMessageParsed.getList() ) {
 			System.out.println( "ID: " + idTuple.getId() + " Name: " + idTuple.getValue() );
 		}
@@ -47,7 +48,7 @@ public class Testing {
 
 		System.out.println( CrossNetUtil.bytesToHex( idsBytes ) );
 
-		IdsMessage idsMessageParsed = (IdsMessage) clientMessageParser.parseData( idsBytes );
+		IdsMessage idsMessageParsed = (IdsMessage) clientMessageParser.parseData( new ByteArrayReader( idsBytes ) );
 		for ( int i : idsMessageParsed.getList() ) {
 			System.out.println( "ID: " + i );
 		}
@@ -63,7 +64,7 @@ public class Testing {
 
 		System.out.println( CrossNetUtil.bytesToHex( readyBytes ) );
 
-		ReadysMessage readysMessageParsed = (ReadysMessage) clientMessageParser.parseData( readyBytes );
+		ReadysMessage readysMessageParsed = (ReadysMessage) clientMessageParser.parseData( new ByteArrayReader( readyBytes ) );
 		System.out.println( "No. ready: " + readysMessageParsed.getNoReady() );
 		System.out.println( "No. not ready: " + readysMessageParsed.getNoNotReady() );
 		for ( IdTuple< Boolean > idTuple : readysMessageParsed.getList() ) {

@@ -1,6 +1,5 @@
 package glhf.client;
 
-import glhf.common.message.GlhfListMessage;
 import glhf.common.message.GlhfMessage;
 import glhf.common.message.GlhfMessageParser;
 import glhf.common.message.client.SetNameMessage;
@@ -17,7 +16,6 @@ import java.util.Map;
 
 import crossnet.CrossNetClient;
 import crossnet.listener.ConnectionListener;
-import crossnet.log.Log;
 import crossnet.message.Message;
 import crossnet.message.MessageParser;
 
@@ -129,26 +127,7 @@ public class GlhfClient {
 	 * @return he number of bytes added to the send buffer.
 	 */
 	public int send( Message message ) {
-		if ( message == null ) {
-			throw new IllegalArgumentException( "Cannot send null." );
-		}
-
-		String messageClass = message.getClass().getSimpleName();
-		boolean wrapped = false;
-		if ( !( ( message instanceof GlhfMessage ) || ( message instanceof GlhfListMessage ) ) ) {
-			// Wrap message in TieredGlhfMessage
-			byte[] messageData = message.getBytes();
-			message = new TieredGlhfMessage( messageData );
-			wrapped = true;
-		}
-
-		int length = this.crossNetClient.getConnection().send( message );
-		if ( length == 0 ) {
-			Log.trace( "GLHF", "Client had nothing to send." );
-		} else if ( wrapped ) {
-			Log.debug( "GLHF", "Client sent: " + messageClass + " (" + length + ")" );
-		}
-		return length;
+		return this.crossNetClient.getConnection().send( message );
 	}
 
 	/**
