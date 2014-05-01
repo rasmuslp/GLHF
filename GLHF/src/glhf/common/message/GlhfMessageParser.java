@@ -3,7 +3,6 @@ package glhf.common.message;
 import glhf.common.message.client.SetNameMessage;
 import glhf.common.message.client.SetReadyMessage;
 import glhf.common.message.common.ChatMessage;
-import glhf.common.message.common.TieredGlhfMessage;
 import glhf.common.message.server.ConnectionChangeMessage;
 import glhf.common.message.server.IdsMessage;
 import glhf.common.message.server.NamesMessage;
@@ -61,11 +60,9 @@ public class GlhfMessageParser extends AbstractMessageParser< GlhfMessageType > 
 				message = ChatMessage.parse( payload );
 				break;
 			case TIERED:
-				TieredGlhfMessage tieredGlhfMessage = TieredGlhfMessage.parse( payload );
 				if ( this.tieredMessageParser != null ) {
-					message = this.tieredMessageParser.parseData( tieredGlhfMessage.getData() );
+					message = this.tieredMessageParser.parseData( payload );
 				} else {
-					message = tieredGlhfMessage;
 					Log.warn( "GLHF", "No tiered parser: Cannot parse content of TieredGlhfMessage." );
 				}
 				break;

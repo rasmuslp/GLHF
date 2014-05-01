@@ -78,11 +78,6 @@ public class GlhfServer {
 				}
 
 			}
-
-			@Override
-			protected Connection newConnection() {
-				return new GlhfConnection();
-			}
 		};
 
 		// Sets the GLHF MessageParser as the tiered parser on the CrossNet parser.
