@@ -12,7 +12,7 @@ import glhf.common.entity.single.IntegerEntity;
  * 
  * @param <T>
  */
-public abstract class IdTupleEntity< T extends SingleEntity< ? > > implements Entity {
+public abstract class IdSingleEntity< T extends SingleEntity< ? > > implements Entity {
 
 	/**
 	 * The ID.
@@ -32,7 +32,7 @@ public abstract class IdTupleEntity< T extends SingleEntity< ? > > implements En
 	 * @param entity
 	 *            The SingleEntity to wrap.
 	 */
-	public IdTupleEntity( final int id, final T entity ) {
+	public IdSingleEntity( final int id, final T entity ) {
 		if ( entity == null ) {
 			throw new IllegalArgumentException( "Entity cannot be null." );
 		}

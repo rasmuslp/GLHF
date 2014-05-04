@@ -6,9 +6,21 @@ import java.io.IOException;
 
 import crossnet.util.ByteArrayWriter;
 
+/**
+ * This is an integer wrapper.
+ * 
+ * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
+ * 
+ */
 public class IntegerEntity extends SingleEntity< Integer > {
 
-	public IntegerEntity( Integer integer ) {
+	/**
+	 * Create an IntegerEntity that wraps an integer.
+	 * 
+	 * @param integer
+	 *            The integer to wrap.
+	 */
+	public IntegerEntity( int integer ) {
 		super( integer );
 	}
 
