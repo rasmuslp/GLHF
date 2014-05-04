@@ -6,7 +6,6 @@ import glhf.common.entity.tuple.IdIntegerEntity;
 import glhf.common.entity.tuple.IdStringEntity;
 import glhf.common.message.GlhfMessage;
 import glhf.common.message.common.ChatMessage;
-import glhf.common.message.common.TieredGlhfMessage;
 import glhf.common.message.server.ConnectionChangeMessage;
 import glhf.common.message.server.IdsMessage;
 import glhf.common.message.server.NamesMessage;
@@ -48,78 +47,121 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 
 	@Override
 	public void received( Connection connection, Message message ) {
-		if ( message instanceof ChatMessage ) {
-			ChatMessage chatMessage = (ChatMessage) message;
-			String chat = chatMessage.getChat();
+		if ( !( message instanceof GlhfMessage ) ) {
+			return;
+		}
 
-			if ( chatMessage.isServerMessage() ) {
-				if ( chatMessage.isPrivate() ) {
-					this.notifyChat( null, chat, this.self );
-				} else {
-					this.notifyChat( null, chat, null );
+		switch ( ( (GlhfMessage) message ).getType() ) {
+
+		// Server Messages
+
+			case S_IDS: {
+				IdsMessage idsMessage = (IdsMessage) message;
+
+				// Convert to set.
+				Set< Integer > newIds = new HashSet<>();
+				for ( IntegerEntity integerEntity : idsMessage.getList() ) {
+					newIds.add( integerEntity.get() );
 				}
-			} else {
-				Player sender = this.players.get( chatMessage.getSenderId() );
-				if ( sender == null ) {
-					Log.debug( "GLHF", "Chat message from Player who has left the realm. Skipping." );
-					return;
+
+				// Remove IDs that are no longer there.
+				Set< Integer > oldIds = new HashSet<>( this.players.keySet() );
+				for ( Integer id : oldIds ) {
+					if ( !newIds.contains( id ) ) {
+						this.removePlayer( id );
+					}
 				}
-				if ( chatMessage.isPrivate() ) {
-					this.notifyChat( sender, chat, this.self );
-				} else {
-					this.notifyChat( sender, chat, null );
+
+				// Add new IDs.
+				for ( Integer id : newIds ) {
+					if ( !this.players.keySet().contains( id ) ) {
+						this.addPlayer( id );
+					}
 				}
-			}
-		} else if ( message instanceof IdsMessage ) {
-			IdsMessage idsMessage = (IdsMessage) message;
-			Set< Integer > newIds = new HashSet<>();
-			for ( IntegerEntity integerEntity : idsMessage.getList() ) {
-				newIds.add( integerEntity.get() );
+				break;
 			}
 
-			// Remove ids that are no longer there
-			Set< Integer > oldIds = new HashSet<>( this.players.keySet() );
-			for ( Integer id : oldIds ) {
-				if ( !newIds.contains( id ) ) {
+			case S_CONNECTION_CHANGE: {
+				ConnectionChangeMessage connectionChangeMessage = (ConnectionChangeMessage) message;
+				int id = connectionChangeMessage.getID();
+
+				// Add / remove player 
+				if ( connectionChangeMessage.didConnect() ) {
+					this.addPlayer( id );
+				} else {
 					this.removePlayer( id );
 				}
+				break;
 			}
 
-			// Add new ids
-			for ( Integer id : newIds ) {
-				if ( !this.players.keySet().contains( id ) ) {
-					this.addPlayer( id );
+			case S_NAMES: {
+				NamesMessage namesMessage = (NamesMessage) message;
+
+				// Update local storage.
+				for ( IdStringEntity idName : namesMessage.getList() ) {
+					this.updateName( idName.getId(), idName.getEntity().get() );
 				}
+				break;
 			}
-		} else if ( message instanceof ConnectionChangeMessage ) {
-			ConnectionChangeMessage connectionChangeMessage = (ConnectionChangeMessage) message;
-			int id = connectionChangeMessage.getID();
 
-			if ( connectionChangeMessage.didConnect() ) {
-				this.addPlayer( id );
-			} else {
-				this.removePlayer( id );
-			}
-		} else if ( message instanceof NamesMessage ) {
-			NamesMessage namesMessage = (NamesMessage) message;
+			case S_PINGS: {
+				PingsMessage pingsMessage = (PingsMessage) message;
 
-			for ( IdStringEntity idName : namesMessage.getList() ) {
-				this.updateName( idName.getId(), idName.getEntity().get() );
+				// Update local storage.
+				for ( IdIntegerEntity idPing : pingsMessage.getList() ) {
+					this.updatePing( idPing.getId(), idPing.getEntity().get() );
+				}
+				break;
 			}
-		} else if ( message instanceof PingsMessage ) {
-			PingsMessage pingsMessage = (PingsMessage) message;
 
-			for ( IdIntegerEntity idPing : pingsMessage.getList() ) {
-				this.updatePing( idPing.getId(), idPing.getEntity().get() );
-			}
-		} else if ( message instanceof ReadysMessage ) {
-			ReadysMessage readysMessage = (ReadysMessage) message;
+			case S_READYS: {
+				ReadysMessage readysMessage = (ReadysMessage) message;
 
-			for ( IdBooleanEntity idReady : readysMessage.getList() ) {
-				this.updateReady( idReady.getId(), idReady.getEntity().get() );
+				// Update local storage.
+				for ( IdBooleanEntity idReady : readysMessage.getList() ) {
+					this.updateReady( idReady.getId(), idReady.getEntity().get() );
+				}
+				break;
 			}
-		} else if ( ( message instanceof GlhfMessage ) && !( message instanceof TieredGlhfMessage ) ) {
-			Log.warn( "GLHF", "Got unexpected Message Type: " + message.getClass().getSimpleName() );
+
+			// Client Messages
+
+			case C_NAME:
+			case C_READY:
+				Log.warn( "GLHF", "Got unexpected Message Type: " + message.getMessageClass() );
+				break;
+
+			// Common Messages
+
+			case CHAT: {
+				ChatMessage chatMessage = (ChatMessage) message;
+				String chat = chatMessage.getChat();
+
+				if ( chatMessage.isServerMessage() ) {
+					if ( chatMessage.isPrivate() ) {
+						this.notifyChat( null, chat, this.self );
+					} else {
+						this.notifyChat( null, chat, null );
+					}
+				} else {
+					Player sender = this.players.get( chatMessage.getSenderId() );
+					if ( sender == null ) {
+						Log.debug( "GLHF", "Chat message from Player who has left the realm. Skipping." );
+						return;
+					}
+					if ( chatMessage.isPrivate() ) {
+						this.notifyChat( sender, chat, this.self );
+					} else {
+						this.notifyChat( sender, chat, null );
+					}
+				}
+				break;
+			}
+
+			case TIERED:
+			default:
+				// Ignored
+				break;
 		}
 	}
 

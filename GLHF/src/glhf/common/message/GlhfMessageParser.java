@@ -40,7 +40,9 @@ public class GlhfMessageParser extends AbstractMessageParser< GlhfMessageType > 
 
 		try {
 			switch ( messageType ) {
+
 			// Server Messages
+
 				case S_IDS: {
 					List< IntegerEntity > list = new ArrayList<>();
 					int count = payload.readInt();
@@ -51,12 +53,14 @@ public class GlhfMessageParser extends AbstractMessageParser< GlhfMessageType > 
 					message = new IdsMessage( list );
 					break;
 				}
+
 				case S_CONNECTION_CHANGE: {
 					int id = payload.readInt();
 					boolean didConnect = payload.readBoolean();
 					message = new ConnectionChangeMessage( id, didConnect );
 					break;
 				}
+
 				case S_NAMES: {
 					List< IdStringEntity > tuples = new ArrayList<>();
 					int count = payload.readInt();
@@ -68,6 +72,7 @@ public class GlhfMessageParser extends AbstractMessageParser< GlhfMessageType > 
 					message = new NamesMessage( tuples );
 					break;
 				}
+
 				case S_PINGS: {
 					List< IdIntegerEntity > tuples = new ArrayList<>();
 					int count = payload.readInt();
@@ -79,6 +84,7 @@ public class GlhfMessageParser extends AbstractMessageParser< GlhfMessageType > 
 					message = new PingsMessage( tuples );
 					break;
 				}
+
 				case S_READYS: {
 					int noReady = payload.readInt();
 					int noNotReady = payload.readInt();
@@ -94,11 +100,13 @@ public class GlhfMessageParser extends AbstractMessageParser< GlhfMessageType > 
 				}
 
 				// Client Messages
+
 				case C_NAME: {
 					String name = payload.readString255();
 					message = new SetNameMessage( name );
 					break;
 				}
+
 				case C_READY: {
 					boolean ready = payload.readBoolean();
 					message = new SetReadyMessage( ready );
@@ -106,6 +114,7 @@ public class GlhfMessageParser extends AbstractMessageParser< GlhfMessageType > 
 				}
 
 				// Common Messages
+
 				case CHAT: {
 					int senderId = payload.readInt();
 					int receiverId = payload.readInt();

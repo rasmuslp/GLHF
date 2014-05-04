@@ -8,7 +8,6 @@ import glhf.common.message.GlhfMessage;
 import glhf.common.message.client.SetNameMessage;
 import glhf.common.message.client.SetReadyMessage;
 import glhf.common.message.common.ChatMessage;
-import glhf.common.message.common.TieredGlhfMessage;
 import glhf.common.message.server.ConnectionChangeMessage;
 import glhf.common.message.server.IdsMessage;
 import glhf.common.message.server.NamesMessage;
@@ -94,6 +93,18 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 
 		int senderId = connection.getID();
 		switch ( ( (GlhfMessage) message ).getType() ) {
+
+		// Server Messages
+			case S_IDS:
+			case S_CONNECTION_CHANGE:
+			case S_NAMES:
+			case S_PINGS:
+			case S_READYS:
+				Log.warn( "GLHF", "Got unexpected Message Type: " + message.getMessageClass() );
+				break;
+
+			// Client Messages
+
 			case C_NAME: {
 				SetNameMessage setNameMessage = (SetNameMessage) message;
 				String name = setNameMessage.getName();
@@ -105,9 +116,9 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 				List< IdStringEntity > nameList = new ArrayList<>();
 				nameList.add( new IdStringEntity( senderId, name ) );
 				this.glhfServer.sendToAll( new NamesMessage( nameList ) );
-
 				break;
 			}
+
 			case C_READY: {
 				SetReadyMessage setReadyMessage = (SetReadyMessage) message;
 				boolean isReady = setReadyMessage.isReady();
@@ -128,39 +139,44 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 				List< IdBooleanEntity > readyList = new ArrayList<>();
 				readyList.add( new IdBooleanEntity( senderId, isReady ) );
 				this.glhfServer.sendToAll( new ReadysMessage( noReady, noNotReady, readyList ) );
-
 				break;
 			}
-		}
 
-		if ( message instanceof ChatMessage ) {
-			ChatMessage chatMessage = (ChatMessage) message;
-			chatMessage.setSenderId( senderId );
-			String chat = chatMessage.getChat();
-			int receiverId = chatMessage.getReceiverId();
+			// Common Messages
 
-			// Determine sender
-			Player sender = this.players.get( senderId );
-			if ( sender == null ) {
-				Log.debug( "GLHF", "Chat message from Player who has left the realm. Skipping." );
-				return;
-			}
+			case CHAT: {
+				ChatMessage chatMessage = (ChatMessage) message;
+				chatMessage.setSenderId( senderId );
+				String chat = chatMessage.getChat();
+				int receiverId = chatMessage.getReceiverId();
 
-			// Notify and pass on.
-			if ( chatMessage.isPrivate() ) {
-				Player receiver = this.players.get( receiverId );
-				if ( receiver == null ) {
-					Log.debug( "GLHF", "Chat message to Player who has left the realm. Skipping." );
+				// Determine sender
+				Player sender = this.players.get( senderId );
+				if ( sender == null ) {
+					Log.debug( "GLHF", "Chat message from Player who has left the realm. Skipping." );
 					return;
 				}
-				this.notifyChat( sender, chat, receiver );
-				this.glhfServer.getConnections().get( chatMessage.getReceiverId() ).send( chatMessage );
-			} else {
-				this.notifyChat( sender, chat, null );
-				this.glhfServer.sendToAll( chatMessage );
+
+				// Notify and pass on.
+				if ( chatMessage.isPrivate() ) {
+					Player receiver = this.players.get( receiverId );
+					if ( receiver == null ) {
+						Log.debug( "GLHF", "Chat message to Player who has left the realm. Skipping." );
+						return;
+					}
+					this.notifyChat( sender, chat, receiver );
+					this.glhfServer.getConnections().get( chatMessage.getReceiverId() ).send( chatMessage );
+				} else {
+					this.notifyChat( sender, chat, null );
+					this.glhfServer.sendToAll( chatMessage );
+				}
+				break;
 			}
-		} else if ( ( message instanceof GlhfMessage ) && !( message instanceof TieredGlhfMessage ) ) {
-			Log.warn( "GLHF", "Got unexpected Message Type: " + message.getClass().getSimpleName() );
+
+			case TIERED:
+			default:
+				// Ignored
+				break;
 		}
 	}
 

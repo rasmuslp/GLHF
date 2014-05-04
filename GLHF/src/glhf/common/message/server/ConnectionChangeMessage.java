@@ -1,12 +1,9 @@
 package glhf.common.message.server;
 
 import glhf.client.GlhfClient;
-import glhf.common.message.GlhfMessage;
+import glhf.common.entity.tuple.IdBooleanEntity;
 import glhf.common.message.GlhfMessageType;
-
-import java.io.IOException;
-
-import crossnet.util.ByteArrayWriter;
+import glhf.common.message.type.EntityMessage;
 
 /**
  * This Message announces the connect or disconnect of a {@link GlhfClient}.
@@ -14,17 +11,7 @@ import crossnet.util.ByteArrayWriter;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class ConnectionChangeMessage extends GlhfMessage {
-
-	/**
-	 * The ID of the {@link GlhfClient}.
-	 */
-	private final int id;
-
-	/**
-	 * {@code True} iff the {@link GlhfClient} connected, false if it disconnected.
-	 */
-	private final boolean didConnect;
+public class ConnectionChangeMessage extends EntityMessage< IdBooleanEntity > {
 
 	/**
 	 * Announces the connection change for a {@link GlhfClient}.
@@ -35,29 +22,21 @@ public class ConnectionChangeMessage extends GlhfMessage {
 	 *            {@code True} iff the {@link GlhfClient} connected, false if it disconnected.
 	 */
 	public ConnectionChangeMessage( final int id, final boolean didConnect ) {
-		super( GlhfMessageType.S_CONNECTION_CHANGE );
-		this.id = id;
-		this.didConnect = didConnect;
+		super( GlhfMessageType.S_CONNECTION_CHANGE, new IdBooleanEntity( id, didConnect ) );
 	}
 
 	/**
 	 * @return The {@link GlhfClient} ID.
 	 */
 	public int getID() {
-		return this.id;
+		return this.getEntity().getId();
 	}
 
 	/**
 	 * @return {@code True} iff the {@link GlhfClient} connected, false if it disconnected.
 	 */
 	public boolean didConnect() {
-		return this.didConnect;
-	}
-
-	@Override
-	protected void serializeGlhfPayload( ByteArrayWriter to ) throws IOException {
-		to.writeInt( this.id );
-		to.writeBoolean( this.didConnect );
+		return this.getEntity().getEntity().get();
 	}
 
 }
