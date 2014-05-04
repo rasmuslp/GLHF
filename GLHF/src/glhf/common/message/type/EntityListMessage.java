@@ -1,4 +1,8 @@
-package glhf.common.message;
+package glhf.common.message.type;
+
+import glhf.common.entity.Entity;
+import glhf.common.message.GlhfMessage;
+import glhf.common.message.GlhfMessageType;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,14 +17,14 @@ import crossnet.util.ByteArrayWriter;
  * @param <T>
  *            The list type.
  */
-public abstract class GlhfListMessage< T > extends GlhfMessage {
+public abstract class EntityListMessage< T extends Entity > extends GlhfMessage {
 
 	/**
 	 * The list payload.
 	 */
 	protected final List< T > list;
 
-	public GlhfListMessage( GlhfMessageType messageType, List< T > list ) {
+	public EntityListMessage( GlhfMessageType messageType, List< T > list ) {
 		super( messageType );
 		if ( list == null ) {
 			throw new IllegalArgumentException( "List cannot be null." );

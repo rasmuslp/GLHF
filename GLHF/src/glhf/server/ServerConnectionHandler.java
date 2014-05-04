@@ -1,7 +1,10 @@
 package glhf.server;
 
+import glhf.common.entity.single.IntegerEntity;
+import glhf.common.entity.tuple.IdBooleanEntity;
+import glhf.common.entity.tuple.IdIntegerEntity;
+import glhf.common.entity.tuple.IdStringEntity;
 import glhf.common.message.GlhfMessage;
-import glhf.common.message.IdTuple;
 import glhf.common.message.client.SetNameMessage;
 import glhf.common.message.client.SetReadyMessage;
 import glhf.common.message.common.ChatMessage;
@@ -44,22 +47,22 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 		this.addPlayer( id );
 
 		// Send complete ID list to new connection. Along with other available information.
-		List< Integer > idList = new ArrayList<>();
-		List< IdTuple< String >> nameList = new ArrayList<>();
+		List< IntegerEntity > idList = new ArrayList<>();
+		List< IdStringEntity > nameList = new ArrayList<>();
 		int noReady = 0;
 		int noNotReady = 0;
-		List< IdTuple< Boolean >> readyList = new ArrayList<>();
-		List< IdTuple< Integer >> pingList = new ArrayList<>();
+		List< IdBooleanEntity > readyList = new ArrayList<>();
+		List< IdIntegerEntity > pingList = new ArrayList<>();
 		for ( Player player : this.players.values() ) {
-			idList.add( player.getID() );
-			nameList.add( new IdTuple<>( player.getID(), player.getName() ) );
-			readyList.add( new IdTuple<>( player.getID(), player.isReady() ) );
+			idList.add( new IntegerEntity( player.getID() ) );
+			nameList.add( new IdStringEntity( player.getID(), player.getName() ) );
+			readyList.add( new IdBooleanEntity( player.getID(), player.isReady() ) );
 			if ( player.isReady() ) {
 				noReady++;
 			} else {
 				noNotReady++;
 			}
-			pingList.add( new IdTuple<>( player.getID(), player.getPing() ) );
+			pingList.add( new IdIntegerEntity( player.getID(), player.getPing() ) );
 		}
 		connection.send( new IdsMessage( idList ) );
 		connection.send( new NamesMessage( nameList ) );
@@ -85,7 +88,50 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 
 	@Override
 	public void received( Connection connection, Message message ) {
+		if ( !( message instanceof GlhfMessage ) ) {
+			return;
+		}
+
 		int senderId = connection.getID();
+		switch ( ( (GlhfMessage) message ).getType() ) {
+			case C_NAME: {
+				SetNameMessage setNameMessage = (SetNameMessage) message;
+				String name = setNameMessage.getName();
+
+				// Update local storage.
+				this.updateName( senderId, name );
+
+				// Send notification to all other Clients.
+				List< IdStringEntity > nameList = new ArrayList<>();
+				nameList.add( new IdStringEntity( senderId, name ) );
+				this.glhfServer.sendToAll( new NamesMessage( nameList ) );
+
+				break;
+			}
+			case C_READY: {
+				SetReadyMessage setReadyMessage = (SetReadyMessage) message;
+				boolean isReady = setReadyMessage.isReady();
+
+				// Update local storage.
+				this.updateReady( senderId, isReady );
+
+				// Send notification to all other Clients.
+				int noReady = 0;
+				int noNotReady = 0;
+				for ( Player player : this.players.values() ) {
+					if ( player.isReady() ) {
+						noReady++;
+					} else {
+						noNotReady++;
+					}
+				}
+				List< IdBooleanEntity > readyList = new ArrayList<>();
+				readyList.add( new IdBooleanEntity( senderId, isReady ) );
+				this.glhfServer.sendToAll( new ReadysMessage( noReady, noNotReady, readyList ) );
+
+				break;
+			}
+		}
 
 		if ( message instanceof ChatMessage ) {
 			ChatMessage chatMessage = (ChatMessage) message;
@@ -113,37 +159,6 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 				this.notifyChat( sender, chat, null );
 				this.glhfServer.sendToAll( chatMessage );
 			}
-		} else if ( message instanceof SetNameMessage ) {
-			SetNameMessage setNameMessage = (SetNameMessage) message;
-			String name = setNameMessage.getName();
-
-			// Update local storage.
-			this.updateName( senderId, name );
-
-			// Send notification to all other Clients.
-			List< IdTuple< String > > nameList = new ArrayList<>();
-			nameList.add( new IdTuple<>( senderId, name ) );
-			this.glhfServer.sendToAll( new NamesMessage( nameList ) );
-		} else if ( message instanceof SetReadyMessage ) {
-			SetReadyMessage setReadyMessage = (SetReadyMessage) message;
-			boolean isReady = setReadyMessage.isReady();
-
-			// Update local storage.
-			this.updateReady( senderId, isReady );
-
-			// Send notification to all other Clients.
-			int noReady = 0;
-			int noNotReady = 0;
-			for ( Player player : this.players.values() ) {
-				if ( player.isReady() ) {
-					noReady++;
-				} else {
-					noNotReady++;
-				}
-			}
-			List< IdTuple< Boolean > > readyList = new ArrayList<>();
-			readyList.add( new IdTuple<>( senderId, isReady ) );
-			this.glhfServer.sendToAll( new ReadysMessage( noReady, noNotReady, readyList ) );
 		} else if ( ( message instanceof GlhfMessage ) && !( message instanceof TieredGlhfMessage ) ) {
 			Log.warn( "GLHF", "Got unexpected Message Type: " + message.getClass().getSimpleName() );
 		}
@@ -158,7 +173,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 	 * Sends all changed ping RTTs to all {@link Player}s.
 	 */
 	public void updatePings() {
-		List< IdTuple< Integer >> pingList = new ArrayList<>();
+		List< IdIntegerEntity > pingList = new ArrayList<>();
 		for ( Player player : this.players.values() ) {
 			int id = player.getID();
 			int ping = this.glhfServer.getConnections().get( id ).getTransportLayer().getPingRoundTripTime();
@@ -167,7 +182,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 				continue;
 			}
 			this.updatePing( id, ping );
-			pingList.add( new IdTuple<>( id, ping ) );
+			pingList.add( new IdIntegerEntity( id, ping ) );
 		}
 		this.glhfServer.sendToAll( new PingsMessage( pingList ) );
 	}

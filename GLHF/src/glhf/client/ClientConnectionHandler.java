@@ -1,7 +1,10 @@
 package glhf.client;
 
+import glhf.common.entity.single.IntegerEntity;
+import glhf.common.entity.tuple.IdBooleanEntity;
+import glhf.common.entity.tuple.IdIntegerEntity;
+import glhf.common.entity.tuple.IdStringEntity;
 import glhf.common.message.GlhfMessage;
-import glhf.common.message.IdTuple;
 import glhf.common.message.common.ChatMessage;
 import glhf.common.message.common.TieredGlhfMessage;
 import glhf.common.message.server.ConnectionChangeMessage;
@@ -69,7 +72,10 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 			}
 		} else if ( message instanceof IdsMessage ) {
 			IdsMessage idsMessage = (IdsMessage) message;
-			Set< Integer > newIds = new HashSet<>( idsMessage.getList() );
+			Set< Integer > newIds = new HashSet<>();
+			for ( IntegerEntity integerEntity : idsMessage.getList() ) {
+				newIds.add( integerEntity.getObject() );
+			}
 
 			// Remove ids that are no longer there
 			Set< Integer > oldIds = new HashSet<>( this.players.keySet() );
@@ -97,20 +103,20 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 		} else if ( message instanceof NamesMessage ) {
 			NamesMessage namesMessage = (NamesMessage) message;
 
-			for ( IdTuple< String > idName : namesMessage.getList() ) {
-				this.updateName( idName.getId(), idName.getValue() );
+			for ( IdStringEntity idName : namesMessage.getList() ) {
+				this.updateName( idName.getId(), idName.getEntity().getObject() );
 			}
 		} else if ( message instanceof PingsMessage ) {
 			PingsMessage pingsMessage = (PingsMessage) message;
 
-			for ( IdTuple< Integer > idPing : pingsMessage.getList() ) {
-				this.updatePing( idPing.getId(), idPing.getValue() );
+			for ( IdIntegerEntity idPing : pingsMessage.getList() ) {
+				this.updatePing( idPing.getId(), idPing.getEntity().getObject() );
 			}
 		} else if ( message instanceof ReadysMessage ) {
 			ReadysMessage readysMessage = (ReadysMessage) message;
 
-			for ( IdTuple< Boolean > idReady : readysMessage.getList() ) {
-				this.updateReady( idReady.getId(), idReady.getValue() );
+			for ( IdBooleanEntity idReady : readysMessage.getList() ) {
+				this.updateReady( idReady.getId(), idReady.getEntity().getObject() );
 			}
 		} else if ( ( message instanceof GlhfMessage ) && !( message instanceof TieredGlhfMessage ) ) {
 			Log.warn( "GLHF", "Got unexpected Message Type: " + message.getClass().getSimpleName() );

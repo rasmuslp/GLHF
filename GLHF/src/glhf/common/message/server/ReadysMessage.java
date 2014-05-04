@@ -1,16 +1,13 @@
 package glhf.common.message.server;
 
 import glhf.client.GlhfClient;
-import glhf.common.message.GlhfListMessage;
+import glhf.common.entity.tuple.IdBooleanEntity;
 import glhf.common.message.GlhfMessageType;
-import glhf.common.message.IdTuple;
+import glhf.common.message.type.EntityListMessage;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import crossnet.log.Log;
-import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
 /**
@@ -21,7 +18,7 @@ import crossnet.util.ByteArrayWriter;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class ReadysMessage extends GlhfListMessage< IdTuple< Boolean > > {
+public class ReadysMessage extends EntityListMessage< IdBooleanEntity > {
 
 	/**
 	 * Number of ready {@link GlhfClient}s.
@@ -33,7 +30,7 @@ public class ReadysMessage extends GlhfListMessage< IdTuple< Boolean > > {
 	 */
 	private final int noNotReady;
 
-	public ReadysMessage( final int noReady, final int noNotReady, List< IdTuple< Boolean > > list ) {
+	public ReadysMessage( final int noReady, final int noNotReady, List< IdBooleanEntity > list ) {
 		super( GlhfMessageType.S_READYS, list );
 		this.noReady = noReady;
 		this.noNotReady = noNotReady;
@@ -78,35 +75,7 @@ public class ReadysMessage extends GlhfListMessage< IdTuple< Boolean > > {
 
 	@Override
 	protected void serializeListObject( int atIndex, ByteArrayWriter to ) throws IOException {
-		IdTuple< Boolean > idTuple = this.list.get( atIndex );
-		to.writeInt( idTuple.getId() );
-		to.writeBoolean( idTuple.getValue() );
-	}
-
-	/**
-	 * Construct an ReadysMessage from the provided payload.
-	 * 
-	 * @param payload
-	 *            The payload from which to determine the content of this.
-	 * @return A freshly parsed ReadysMessage.
-	 */
-	public static ReadysMessage parse( ByteArrayReader payload ) {
-		try {
-			int noReady = payload.readInt();
-			int noNotReady = payload.readInt();
-			int count = payload.readInt();
-			List< IdTuple< Boolean > > tuples = new ArrayList<>();
-			for ( int i = 0; i < count; i++ ) {
-				int id = payload.readInt();
-				boolean ready = payload.readBoolean();
-				tuples.add( new IdTuple<>( id, ready ) );
-			}
-			return new ReadysMessage( noReady, noNotReady, tuples );
-		} catch ( IOException e ) {
-			Log.error( "GLHF", "Error deserializing ReadysMessage:", e );
-		}
-
-		return null;
+		this.list.get( atIndex ).serialise( to );
 	}
 
 }

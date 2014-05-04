@@ -6,8 +6,6 @@ import glhf.common.message.GlhfMessageType;
 
 import java.io.IOException;
 
-import crossnet.log.Log;
-import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
 /**
@@ -60,25 +58,6 @@ public class ConnectionChangeMessage extends GlhfMessage {
 	protected void serializeGlhfPayload( ByteArrayWriter to ) throws IOException {
 		to.writeInt( this.id );
 		to.writeBoolean( this.didConnect );
-	}
-
-	/**
-	 * Construct an ConnectionChangeMessage from the provided payload.
-	 * 
-	 * @param payload
-	 *            The payload from which to determine the content of this.
-	 * @return A freshly parsed ConnectionChangeMessage.
-	 */
-	public static ConnectionChangeMessage parse( ByteArrayReader payload ) {
-		try {
-			int id = payload.readInt();
-			boolean didConnect = payload.readBoolean();
-			return new ConnectionChangeMessage( id, didConnect );
-		} catch ( IOException e ) {
-			Log.error( "GLHF", "Error deserializing ConnectionChangeMessage:", e );
-		}
-
-		return null;
 	}
 
 }

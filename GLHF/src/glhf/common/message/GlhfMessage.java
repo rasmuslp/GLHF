@@ -22,6 +22,10 @@ public abstract class GlhfMessage extends TieredCrossNetMessage {
 		this.glhfMessageType = glhfMessageType;
 	}
 
+	public GlhfMessageType getType() {
+		return this.glhfMessageType;
+	}
+
 	@Override
 	protected void serializeCrossNetPayload( ByteArrayWriter to ) throws IOException {
 		to.writeByte( this.glhfMessageType.ordinal() );
