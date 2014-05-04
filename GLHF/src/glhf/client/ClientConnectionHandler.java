@@ -74,7 +74,7 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 			IdsMessage idsMessage = (IdsMessage) message;
 			Set< Integer > newIds = new HashSet<>();
 			for ( IntegerEntity integerEntity : idsMessage.getList() ) {
-				newIds.add( integerEntity.getObject() );
+				newIds.add( integerEntity.get() );
 			}
 
 			// Remove ids that are no longer there
@@ -104,19 +104,19 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 			NamesMessage namesMessage = (NamesMessage) message;
 
 			for ( IdStringEntity idName : namesMessage.getList() ) {
-				this.updateName( idName.getId(), idName.getEntity().getObject() );
+				this.updateName( idName.getId(), idName.getEntity().get() );
 			}
 		} else if ( message instanceof PingsMessage ) {
 			PingsMessage pingsMessage = (PingsMessage) message;
 
 			for ( IdIntegerEntity idPing : pingsMessage.getList() ) {
-				this.updatePing( idPing.getId(), idPing.getEntity().getObject() );
+				this.updatePing( idPing.getId(), idPing.getEntity().get() );
 			}
 		} else if ( message instanceof ReadysMessage ) {
 			ReadysMessage readysMessage = (ReadysMessage) message;
 
 			for ( IdBooleanEntity idReady : readysMessage.getList() ) {
-				this.updateReady( idReady.getId(), idReady.getEntity().getObject() );
+				this.updateReady( idReady.getId(), idReady.getEntity().get() );
 			}
 		} else if ( ( message instanceof GlhfMessage ) && !( message instanceof TieredGlhfMessage ) ) {
 			Log.warn( "GLHF", "Got unexpected Message Type: " + message.getClass().getSimpleName() );

@@ -34,7 +34,7 @@ public abstract class SingleEntity< T > implements Entity {
 	/**
 	 * @return The wrapped object.
 	 */
-	public T getObject() {
+	public T get() {
 		return this.object;
 	}
 

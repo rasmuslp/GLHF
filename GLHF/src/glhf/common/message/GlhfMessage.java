@@ -18,10 +18,19 @@ public abstract class GlhfMessage extends TieredCrossNetMessage {
 	 */
 	protected final GlhfMessageType glhfMessageType;
 
+	/**
+	 * Create a new GlhfMessage of provided type.
+	 * 
+	 * @param glhfMessageType
+	 *            The type of GlhfMessage.
+	 */
 	public GlhfMessage( GlhfMessageType glhfMessageType ) {
 		this.glhfMessageType = glhfMessageType;
 	}
 
+	/**
+	 * @return The type of GlhfMessage.
+	 */
 	public GlhfMessageType getType() {
 		return this.glhfMessageType;
 	}

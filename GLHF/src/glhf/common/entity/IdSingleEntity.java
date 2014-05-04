@@ -44,7 +44,7 @@ public abstract class IdSingleEntity< T extends SingleEntity< ? > > implements E
 	 * @return The ID.
 	 */
 	public int getId() {
-		return this.id.getObject();
+		return this.id.get();
 	}
 
 	/**

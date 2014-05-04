@@ -37,7 +37,7 @@ public class Testing {
 
 		NamesMessage namesMessageParsed = (NamesMessage) messageParser.parseData( new ByteArrayReader( namesBytes ) );
 		for ( IdStringEntity idTuple : namesMessageParsed.getList() ) {
-			System.out.println( "ID: " + idTuple.getId() + " Name: " + idTuple.getEntity().getObject() );
+			System.out.println( "ID: " + idTuple.getId() + " Name: " + idTuple.getEntity().get() );
 		}
 
 		// -- IdsMessage
@@ -54,7 +54,7 @@ public class Testing {
 
 		IdsMessage idsMessageParsed = (IdsMessage) messageParser.parseData( new ByteArrayReader( idsBytes ) );
 		for ( IntegerEntity integerEntity : idsMessageParsed.getList() ) {
-			System.out.println( "ID: " + integerEntity.getObject() );
+			System.out.println( "ID: " + integerEntity.get() );
 		}
 
 		// ReadysMessage
@@ -72,7 +72,7 @@ public class Testing {
 		System.out.println( "No. ready: " + readysMessageParsed.getNoReady() );
 		System.out.println( "No. not ready: " + readysMessageParsed.getNoNotReady() );
 		for ( IdBooleanEntity idTuple : readysMessageParsed.getList() ) {
-			System.out.println( "ID: " + idTuple.getId() + " Ready: " + idTuple.getEntity().getObject() );
+			System.out.println( "ID: " + idTuple.getId() + " Ready: " + idTuple.getEntity().get() );
 		}
 
 	}

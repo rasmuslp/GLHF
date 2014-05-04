@@ -128,7 +128,6 @@ public class GlhfMessageParser extends AbstractMessageParser< GlhfMessageType > 
 			}
 		} catch ( IOException e ) {
 			Log.error( "GLHF", "Error deserializing GlhfMessage of type:" + messageType, e );
-			//TODO: Print name from enum
 		}
 
 		return message;
