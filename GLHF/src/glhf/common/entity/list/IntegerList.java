@@ -17,7 +17,7 @@ public class IntegerList extends EntityList< IntegerEntity > {
 	 * 
 	 * @param integer
 	 *            The integer to add.
-	 * @return @see Collection.add
+	 * @return {@code True} iff underlying Collection changed.
 	 */
 	public boolean add( int integer ) {
 		return this.add( new IntegerEntity( integer ) );
