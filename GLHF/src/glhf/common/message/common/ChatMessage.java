@@ -8,8 +8,6 @@ import glhf.server.ServerConnectionHandler;
 
 import java.io.IOException;
 
-import crossnet.log.Log;
-import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
 /**
@@ -60,7 +58,7 @@ public class ChatMessage extends GlhfMessage {
 	 * @param receiverId
 	 *            The ID of the receiver.
 	 */
-	private ChatMessage( final int senderId, final String chat, final int receiverId ) {
+	public ChatMessage( final int senderId, final String chat, final int receiverId ) {
 		super( GlhfMessageType.CHAT );
 		if ( chat == null ) {
 			throw new IllegalArgumentException( "Chat cannot be null." );
@@ -130,26 +128,6 @@ public class ChatMessage extends GlhfMessage {
 		to.writeInt( this.senderId );
 		to.writeInt( this.receiverId );
 		to.writeString255( this.chat );
-	}
-
-	/**
-	 * Construct an ChatMessage from the provided payload.
-	 * 
-	 * @param payload
-	 *            The payload from which to determine the content of this.
-	 * @return A freshly parsed ChatMessage.
-	 */
-	public static ChatMessage parse( ByteArrayReader payload ) {
-		try {
-			int senderId = payload.readInt();
-			int receiverId = payload.readInt();
-			String chat = payload.readString255();
-			return new ChatMessage( senderId, chat, receiverId );
-		} catch ( IOException e ) {
-			Log.error( "GLHF", "Error deserializing ChatMessage:", e );
-		}
-
-		return null;
 	}
 
 }

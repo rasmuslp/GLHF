@@ -1,14 +1,9 @@
 package glhf.common.message.server;
 
 import glhf.client.GlhfClient;
-import glhf.common.message.GlhfMessage;
+import glhf.common.entity.tuple.IdBooleanEntity;
+import glhf.common.message.GlhfEntityMessage;
 import glhf.common.message.GlhfMessageType;
-
-import java.io.IOException;
-
-import crossnet.log.Log;
-import crossnet.util.ByteArrayReader;
-import crossnet.util.ByteArrayWriter;
 
 /**
  * This Message announces the connect or disconnect of a {@link GlhfClient}.
@@ -16,17 +11,7 @@ import crossnet.util.ByteArrayWriter;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class ConnectionChangeMessage extends GlhfMessage {
-
-	/**
-	 * The ID of the {@link GlhfClient}.
-	 */
-	private final int id;
-
-	/**
-	 * {@code True} iff the {@link GlhfClient} connected, false if it disconnected.
-	 */
-	private final boolean didConnect;
+public class ConnectionChangeMessage extends GlhfEntityMessage< IdBooleanEntity > {
 
 	/**
 	 * Announces the connection change for a {@link GlhfClient}.
@@ -37,48 +22,21 @@ public class ConnectionChangeMessage extends GlhfMessage {
 	 *            {@code True} iff the {@link GlhfClient} connected, false if it disconnected.
 	 */
 	public ConnectionChangeMessage( final int id, final boolean didConnect ) {
-		super( GlhfMessageType.S_CONNECTION_CHANGE );
-		this.id = id;
-		this.didConnect = didConnect;
+		super( GlhfMessageType.S_CONNECTION_CHANGE, new IdBooleanEntity( id, didConnect ) );
 	}
 
 	/**
 	 * @return The {@link GlhfClient} ID.
 	 */
 	public int getID() {
-		return this.id;
+		return this.getEntity().getId();
 	}
 
 	/**
 	 * @return {@code True} iff the {@link GlhfClient} connected, false if it disconnected.
 	 */
 	public boolean didConnect() {
-		return this.didConnect;
-	}
-
-	@Override
-	protected void serializeGlhfPayload( ByteArrayWriter to ) throws IOException {
-		to.writeInt( this.id );
-		to.writeBoolean( this.didConnect );
-	}
-
-	/**
-	 * Construct an ConnectionChangeMessage from the provided payload.
-	 * 
-	 * @param payload
-	 *            The payload from which to determine the content of this.
-	 * @return A freshly parsed ConnectionChangeMessage.
-	 */
-	public static ConnectionChangeMessage parse( ByteArrayReader payload ) {
-		try {
-			int id = payload.readInt();
-			boolean didConnect = payload.readBoolean();
-			return new ConnectionChangeMessage( id, didConnect );
-		} catch ( IOException e ) {
-			Log.error( "GLHF", "Error deserializing ConnectionChangeMessage:", e );
-		}
-
-		return null;
+		return this.getEntity().getEntity().get();
 	}
 
 }

@@ -1,16 +1,13 @@
 package glhf.common.message.server;
 
 import glhf.client.GlhfClient;
-import glhf.common.message.GlhfListMessage;
+import glhf.common.entity.tuple.IdIntegerEntity;
+import glhf.common.message.GlhfEntityListMessage;
 import glhf.common.message.GlhfMessageType;
-import glhf.common.message.IdTuple;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-import crossnet.log.Log;
-import crossnet.util.ByteArrayReader;
 import crossnet.util.ByteArrayWriter;
 
 /**
@@ -21,9 +18,9 @@ import crossnet.util.ByteArrayWriter;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class PingsMessage extends GlhfListMessage< IdTuple< Integer >> {
+public class PingsMessage extends GlhfEntityListMessage< IdIntegerEntity > {
 
-	public PingsMessage( List< IdTuple< Integer >> list ) {
+	public PingsMessage( List< IdIntegerEntity > list ) {
 		super( GlhfMessageType.S_PINGS, list );
 	}
 
@@ -35,32 +32,7 @@ public class PingsMessage extends GlhfListMessage< IdTuple< Integer >> {
 
 	@Override
 	protected void serializeListObject( int atIndex, ByteArrayWriter to ) throws IOException {
-		IdTuple< Integer > idTuple = this.list.get( atIndex );
-		to.writeInt( idTuple.getId() );
-		to.writeInt( idTuple.getValue() );
+		this.list.get( atIndex ).serialise( to );
 	}
 
-	/**
-	 * Construct an PingsMessage from the provided payload.
-	 * 
-	 * @param payload
-	 *            The payload from which to determine the content of this.
-	 * @return A freshly parsed PingsMessage.
-	 */
-	public static PingsMessage parse( ByteArrayReader payload ) {
-		try {
-			List< IdTuple< Integer > > tuples = new ArrayList<>();
-			int count = payload.readInt();
-			for ( int i = 0; i < count; i++ ) {
-				int id = payload.readInt();
-				int ping = payload.readInt();
-				tuples.add( new IdTuple<>( id, ping ) );
-			}
-			return new PingsMessage( tuples );
-		} catch ( IOException e ) {
-			Log.error( "GLHF", "Error deserializing PingsMessage:", e );
-		}
-
-		return null;
-	}
 }

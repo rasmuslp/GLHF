@@ -212,5 +212,4 @@ public class GlhfClient {
 	public void setReady( final boolean isReady ) {
 		this.send( new SetReadyMessage( isReady ) );
 	}
-
 }

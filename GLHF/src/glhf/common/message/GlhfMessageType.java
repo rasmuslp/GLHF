@@ -1,5 +1,6 @@
 package glhf.common.message;
 
+
 /**
  * The various types of {@link GlhfMessage}s.
  * 
