@@ -60,7 +60,7 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 
 				// Convert to set.
 				Set< Integer > newIds = new HashSet<>();
-				for ( IntegerEntity integerEntity : idsMessage.getList() ) {
+				for ( IntegerEntity integerEntity : idsMessage.getEntity() ) {
 					newIds.add( integerEntity.get() );
 				}
 
@@ -98,7 +98,7 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 				NamesMessage namesMessage = (NamesMessage) message;
 
 				// Update local storage.
-				for ( IdStringEntity idName : namesMessage.getList() ) {
+				for ( IdStringEntity idName : namesMessage.getEntity() ) {
 					this.updateName( idName.getId(), idName.getEntity().get() );
 				}
 				break;
@@ -108,7 +108,7 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 				PingsMessage pingsMessage = (PingsMessage) message;
 
 				// Update local storage.
-				for ( IdIntegerEntity idPing : pingsMessage.getList() ) {
+				for ( IdIntegerEntity idPing : pingsMessage.getEntity() ) {
 					this.updatePing( idPing.getId(), idPing.getEntity().get() );
 				}
 				break;
@@ -118,7 +118,7 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 				ReadysMessage readysMessage = (ReadysMessage) message;
 
 				// Update local storage.
-				for ( IdBooleanEntity idReady : readysMessage.getList() ) {
+				for ( IdBooleanEntity idReady : readysMessage.getEntity() ) {
 					this.updateReady( idReady.getId(), idReady.getEntity().get() );
 				}
 				break;

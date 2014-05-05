@@ -1,14 +1,9 @@
 package glhf.common.message.server;
 
 import glhf.client.GlhfClient;
-import glhf.common.entity.single.IntegerEntity;
-import glhf.common.message.GlhfEntityListMessage;
+import glhf.common.entity.list.IntegerList;
+import glhf.common.message.GlhfEntityMessage;
 import glhf.common.message.GlhfMessageType;
-
-import java.io.IOException;
-import java.util.List;
-
-import crossnet.util.ByteArrayWriter;
 
 /**
  * A list of IDs of all relevant {@link GlhfClient}s. 'Relevant' may depend on context.
@@ -16,20 +11,10 @@ import crossnet.util.ByteArrayWriter;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class IdsMessage extends GlhfEntityListMessage< IntegerEntity > {
+public class IdsMessage extends GlhfEntityMessage< IntegerList > {
 
-	public IdsMessage( List< IntegerEntity > list ) {
+	public IdsMessage( IntegerList list ) {
 		super( GlhfMessageType.S_IDS, list );
-	}
-
-	@Override
-	protected void serializeStatic( ByteArrayWriter to ) throws IOException {
-		// No static information to serialise.
-	}
-
-	@Override
-	protected void serializeListObject( int atIndex, ByteArrayWriter to ) throws IOException {
-		this.list.get( atIndex ).serialise( to );
 	}
 
 }

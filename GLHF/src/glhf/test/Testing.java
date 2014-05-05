@@ -1,5 +1,7 @@
 package glhf.test;
 
+import glhf.common.entity.EntityList;
+import glhf.common.entity.list.IntegerList;
 import glhf.common.entity.single.IntegerEntity;
 import glhf.common.entity.tuple.IdBooleanEntity;
 import glhf.common.entity.tuple.IdStringEntity;
@@ -7,10 +9,6 @@ import glhf.common.message.GlhfMessageParser;
 import glhf.common.message.server.IdsMessage;
 import glhf.common.message.server.NamesMessage;
 import glhf.common.message.server.ReadysMessage;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import crossnet.log.Log;
 import crossnet.log.LogLevel;
 import crossnet.message.MessageParser;
@@ -26,7 +24,7 @@ public class Testing {
 		messageParser.setTieredMessageParser( new GlhfMessageParser() );
 
 		// -- NamesMessage
-		List< IdStringEntity > namesList = new ArrayList<>();
+		EntityList< IdStringEntity > namesList = new EntityList<>();
 		namesList.add( new IdStringEntity( 1, "1" ) );
 		namesList.add( new IdStringEntity( 2, "roflkartoffelabekatten" ) );
 
@@ -36,16 +34,16 @@ public class Testing {
 		System.out.println( CrossNetUtil.bytesToHex( namesBytes ) );
 
 		NamesMessage namesMessageParsed = (NamesMessage) messageParser.parseData( new ByteArrayReader( namesBytes ) );
-		for ( IdStringEntity idTuple : namesMessageParsed.getList() ) {
+		for ( IdStringEntity idTuple : namesMessageParsed.getEntity() ) {
 			System.out.println( "ID: " + idTuple.getId() + " Name: " + idTuple.getEntity().get() );
 		}
 
 		// -- IdsMessage
 
-		List< IntegerEntity > listInt = new ArrayList<>();
-		listInt.add( new IntegerEntity( 1 ) );
-		listInt.add( new IntegerEntity( 2 ) );
-		listInt.add( new IntegerEntity( -1 ) );
+		IntegerList listInt = new IntegerList();
+		listInt.add( 1 );
+		listInt.add( 2 );
+		listInt.add( -1 );
 
 		IdsMessage idsMessage = new IdsMessage( listInt );
 		byte[] idsBytes = idsMessage.getBytes();
@@ -53,13 +51,13 @@ public class Testing {
 		System.out.println( CrossNetUtil.bytesToHex( idsBytes ) );
 
 		IdsMessage idsMessageParsed = (IdsMessage) messageParser.parseData( new ByteArrayReader( idsBytes ) );
-		for ( IntegerEntity integerEntity : idsMessageParsed.getList() ) {
+		for ( IntegerEntity integerEntity : idsMessageParsed.getEntity() ) {
 			System.out.println( "ID: " + integerEntity.get() );
 		}
 
 		// ReadysMessage
 
-		List< IdBooleanEntity > listReady = new ArrayList<>();
+		EntityList< IdBooleanEntity > listReady = new EntityList<>();
 		listReady.add( new IdBooleanEntity( 1, false ) );
 		listReady.add( new IdBooleanEntity( 4, true ) );
 
@@ -71,7 +69,7 @@ public class Testing {
 		ReadysMessage readysMessageParsed = (ReadysMessage) messageParser.parseData( new ByteArrayReader( readyBytes ) );
 		System.out.println( "No. ready: " + readysMessageParsed.getNoReady() );
 		System.out.println( "No. not ready: " + readysMessageParsed.getNoNotReady() );
-		for ( IdBooleanEntity idTuple : readysMessageParsed.getList() ) {
+		for ( IdBooleanEntity idTuple : readysMessageParsed.getEntity() ) {
 			System.out.println( "ID: " + idTuple.getId() + " Ready: " + idTuple.getEntity().get() );
 		}
 

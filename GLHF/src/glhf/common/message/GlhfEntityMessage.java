@@ -43,7 +43,20 @@ public abstract class GlhfEntityMessage< T extends Entity > extends GlhfMessage 
 
 	@Override
 	protected void serializeGlhfPayload( ByteArrayWriter to ) throws IOException {
+		this.serializeStatic( to );
 		this.entity.serialise( to );
+	}
+
+	/**
+	 * Serialises any extra information necessary.
+	 * 
+	 * @param to
+	 *            The destination of the serialisation.
+	 * @throws IOException
+	 *             If a serialisation error occurs.
+	 */
+	protected void serializeStatic( ByteArrayWriter to ) throws IOException {
+		// Override if necessary.
 	}
 
 }

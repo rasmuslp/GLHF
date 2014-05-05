@@ -1,6 +1,7 @@
 package glhf.common.message;
 
-import glhf.common.entity.single.IntegerEntity;
+import glhf.common.entity.EntityList;
+import glhf.common.entity.list.IntegerList;
 import glhf.common.entity.tuple.IdBooleanEntity;
 import glhf.common.entity.tuple.IdIntegerEntity;
 import glhf.common.entity.tuple.IdStringEntity;
@@ -14,8 +15,6 @@ import glhf.common.message.server.PingsMessage;
 import glhf.common.message.server.ReadysMessage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import crossnet.log.Log;
 import crossnet.message.AbstractMessageParser;
@@ -44,11 +43,11 @@ public class GlhfMessageParser extends AbstractMessageParser< GlhfMessageType > 
 			// Server Messages
 
 				case S_IDS: {
-					List< IntegerEntity > list = new ArrayList<>();
+					IntegerList list = new IntegerList();
 					int count = payload.readInt();
 					for ( int i = 0; i < count; i++ ) {
 						int id = payload.readInt();
-						list.add( new IntegerEntity( id ) );
+						list.add( id );
 					}
 					message = new IdsMessage( list );
 					break;
@@ -62,7 +61,7 @@ public class GlhfMessageParser extends AbstractMessageParser< GlhfMessageType > 
 				}
 
 				case S_NAMES: {
-					List< IdStringEntity > tuples = new ArrayList<>();
+					EntityList< IdStringEntity > tuples = new EntityList<>();
 					int count = payload.readInt();
 					for ( int i = 0; i < count; i++ ) {
 						int id = payload.readInt();
@@ -74,7 +73,7 @@ public class GlhfMessageParser extends AbstractMessageParser< GlhfMessageType > 
 				}
 
 				case S_PINGS: {
-					List< IdIntegerEntity > tuples = new ArrayList<>();
+					EntityList< IdIntegerEntity > tuples = new EntityList<>();
 					int count = payload.readInt();
 					for ( int i = 0; i < count; i++ ) {
 						int id = payload.readInt();
@@ -89,7 +88,7 @@ public class GlhfMessageParser extends AbstractMessageParser< GlhfMessageType > 
 					int noReady = payload.readInt();
 					int noNotReady = payload.readInt();
 					int count = payload.readInt();
-					List< IdBooleanEntity > tuples = new ArrayList<>();
+					EntityList< IdBooleanEntity > tuples = new EntityList<>();
 					for ( int i = 0; i < count; i++ ) {
 						int id = payload.readInt();
 						boolean ready = payload.readBoolean();

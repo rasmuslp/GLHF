@@ -1,12 +1,12 @@
 package glhf.common.message.server;
 
 import glhf.client.GlhfClient;
+import glhf.common.entity.EntityList;
 import glhf.common.entity.tuple.IdBooleanEntity;
-import glhf.common.message.GlhfEntityListMessage;
+import glhf.common.message.GlhfEntityMessage;
 import glhf.common.message.GlhfMessageType;
 
 import java.io.IOException;
-import java.util.List;
 
 import crossnet.util.ByteArrayWriter;
 
@@ -18,7 +18,7 @@ import crossnet.util.ByteArrayWriter;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class ReadysMessage extends GlhfEntityListMessage< IdBooleanEntity > {
+public class ReadysMessage extends GlhfEntityMessage< EntityList< IdBooleanEntity > > {
 
 	/**
 	 * Number of ready {@link GlhfClient}s.
@@ -30,7 +30,7 @@ public class ReadysMessage extends GlhfEntityListMessage< IdBooleanEntity > {
 	 */
 	private final int noNotReady;
 
-	public ReadysMessage( final int noReady, final int noNotReady, List< IdBooleanEntity > list ) {
+	public ReadysMessage( final int noReady, final int noNotReady, EntityList< IdBooleanEntity > list ) {
 		super( GlhfMessageType.S_READYS, list );
 		this.noReady = noReady;
 		this.noNotReady = noNotReady;
@@ -71,11 +71,6 @@ public class ReadysMessage extends GlhfEntityListMessage< IdBooleanEntity > {
 	protected void serializeStatic( ByteArrayWriter to ) throws IOException {
 		to.writeInt( this.noReady );
 		to.writeInt( this.noNotReady );
-	}
-
-	@Override
-	protected void serializeListObject( int atIndex, ByteArrayWriter to ) throws IOException {
-		this.list.get( atIndex ).serialise( to );
 	}
 
 }

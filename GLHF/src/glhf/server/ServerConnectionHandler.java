@@ -1,6 +1,7 @@
 package glhf.server;
 
-import glhf.common.entity.single.IntegerEntity;
+import glhf.common.entity.EntityList;
+import glhf.common.entity.list.IntegerList;
 import glhf.common.entity.tuple.IdBooleanEntity;
 import glhf.common.entity.tuple.IdIntegerEntity;
 import glhf.common.entity.tuple.IdStringEntity;
@@ -15,10 +16,6 @@ import glhf.common.message.server.PingsMessage;
 import glhf.common.message.server.ReadysMessage;
 import glhf.common.player.Player;
 import glhf.common.player.PlayerHandler;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import crossnet.Connection;
 import crossnet.listener.ConnectionListener;
 import crossnet.log.Log;
@@ -46,14 +43,14 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 		this.addPlayer( id );
 
 		// Send complete ID list to new connection. Along with other available information.
-		List< IntegerEntity > idList = new ArrayList<>();
-		List< IdStringEntity > nameList = new ArrayList<>();
+		IntegerList idList = new IntegerList();
+		EntityList< IdStringEntity > nameList = new EntityList<>();
 		int noReady = 0;
 		int noNotReady = 0;
-		List< IdBooleanEntity > readyList = new ArrayList<>();
-		List< IdIntegerEntity > pingList = new ArrayList<>();
+		EntityList< IdBooleanEntity > readyList = new EntityList<>();
+		EntityList< IdIntegerEntity > pingList = new EntityList<>();
 		for ( Player player : this.players.values() ) {
-			idList.add( new IntegerEntity( player.getID() ) );
+			idList.add( player.getID() );
 			nameList.add( new IdStringEntity( player.getID(), player.getName() ) );
 			readyList.add( new IdBooleanEntity( player.getID(), player.isReady() ) );
 			if ( player.isReady() ) {
@@ -113,7 +110,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 				this.updateName( senderId, name );
 
 				// Send notification to all other Clients.
-				List< IdStringEntity > nameList = new ArrayList<>();
+				EntityList< IdStringEntity > nameList = new EntityList<>();
 				nameList.add( new IdStringEntity( senderId, name ) );
 				this.glhfServer.sendToAll( new NamesMessage( nameList ) );
 				break;
@@ -136,7 +133,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 						noNotReady++;
 					}
 				}
-				List< IdBooleanEntity > readyList = new ArrayList<>();
+				EntityList< IdBooleanEntity > readyList = new EntityList<>();
 				readyList.add( new IdBooleanEntity( senderId, isReady ) );
 				this.glhfServer.sendToAll( new ReadysMessage( noReady, noNotReady, readyList ) );
 				break;
@@ -189,7 +186,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 	 * Sends all changed ping RTTs to all {@link Player}s.
 	 */
 	public void updatePings() {
-		List< IdIntegerEntity > pingList = new ArrayList<>();
+		EntityList< IdIntegerEntity > pingList = new EntityList<>();
 		for ( Player player : this.players.values() ) {
 			int id = player.getID();
 			int ping = this.glhfServer.getConnections().get( id ).getTransportLayer().getPingRoundTripTime();
