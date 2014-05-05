@@ -2,8 +2,8 @@ package glhf.common.message.server;
 
 import glhf.client.GlhfClient;
 import glhf.common.entity.tuple.IdBooleanEntity;
+import glhf.common.message.EntityMessage;
 import glhf.common.message.GlhfMessageType;
-import glhf.common.message.type.EntityMessage;
 
 /**
  * This Message announces the connect or disconnect of a {@link GlhfClient}.

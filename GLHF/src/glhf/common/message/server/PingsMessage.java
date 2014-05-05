@@ -2,8 +2,8 @@ package glhf.common.message.server;
 
 import glhf.client.GlhfClient;
 import glhf.common.entity.tuple.IdIntegerEntity;
+import glhf.common.message.EntityListMessage;
 import glhf.common.message.GlhfMessageType;
-import glhf.common.message.type.EntityListMessage;
 
 import java.io.IOException;
 import java.util.List;

@@ -2,8 +2,8 @@ package glhf.common.message.client;
 
 import glhf.client.GlhfClient;
 import glhf.common.entity.single.StringEntity;
+import glhf.common.message.EntityMessage;
 import glhf.common.message.GlhfMessageType;
-import glhf.common.message.type.EntityMessage;
 
 /**
  * Sets the name for the {@link GlhfClient}.
