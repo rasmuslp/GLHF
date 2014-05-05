@@ -31,7 +31,7 @@ public abstract class GlhfMessage extends TieredCrossNetMessage {
 	/**
 	 * @return The type of GlhfMessage.
 	 */
-	public GlhfMessageType getType() {
+	public GlhfMessageType getGlhfType() {
 		return this.glhfMessageType;
 	}
 

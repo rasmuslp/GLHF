@@ -14,7 +14,7 @@ import crossnet.util.ByteArrayWriter;
  * @param <T>
  *            The type of Entity.
  */
-public abstract class EntityMessage< T extends Entity > extends GlhfMessage {
+public abstract class GlhfEntityMessage< T extends Entity > extends GlhfMessage {
 
 	/**
 	 * The Entity.
@@ -22,16 +22,16 @@ public abstract class EntityMessage< T extends Entity > extends GlhfMessage {
 	private final T entity;
 
 	/**
-	 * Create a new EntityMessage of provided type and Entity.
+	 * Create a new GlhfEntityMessage of provided type and Entity.
 	 * 
 	 * @param glhfMessageType
 	 *            The type of GlhfMessage.
-	 * @param value
+	 * @param entity
 	 *            The Entity.
 	 */
-	public EntityMessage( GlhfMessageType glhfMessageType, T value ) {
+	public GlhfEntityMessage( GlhfMessageType glhfMessageType, T entity ) {
 		super( glhfMessageType );
-		this.entity = value;
+		this.entity = entity;
 	}
 
 	/**

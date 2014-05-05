@@ -15,7 +15,7 @@ import crossnet.util.ByteArrayWriter;
  * @param <T>
  *            The type of Entity in the list.
  */
-public abstract class EntityListMessage< T extends Entity > extends GlhfMessage {
+public abstract class GlhfEntityListMessage< T extends Entity > extends GlhfMessage {
 
 	/**
 	 * The Entity list.
@@ -23,14 +23,14 @@ public abstract class EntityListMessage< T extends Entity > extends GlhfMessage 
 	protected final List< T > list;
 
 	/**
-	 * Create a new EntityListMessage of provided type and list of Entities.
+	 * Create a new GlhfEntityListMessage of provided type and list of Entities.
 	 * 
 	 * @param messageType
 	 *            The type of GlhfMessage.
 	 * @param list
 	 *            The list of Entities.
 	 */
-	public EntityListMessage( GlhfMessageType messageType, List< T > list ) {
+	public GlhfEntityListMessage( GlhfMessageType messageType, List< T > list ) {
 		super( messageType );
 		if ( list == null ) {
 			throw new IllegalArgumentException( "List cannot be null." );

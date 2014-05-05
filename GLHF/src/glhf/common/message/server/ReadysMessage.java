@@ -2,7 +2,7 @@ package glhf.common.message.server;
 
 import glhf.client.GlhfClient;
 import glhf.common.entity.tuple.IdBooleanEntity;
-import glhf.common.message.EntityListMessage;
+import glhf.common.message.GlhfEntityListMessage;
 import glhf.common.message.GlhfMessageType;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ import crossnet.util.ByteArrayWriter;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class ReadysMessage extends EntityListMessage< IdBooleanEntity > {
+public class ReadysMessage extends GlhfEntityListMessage< IdBooleanEntity > {
 
 	/**
 	 * Number of ready {@link GlhfClient}s.

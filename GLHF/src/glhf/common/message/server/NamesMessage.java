@@ -2,7 +2,7 @@ package glhf.common.message.server;
 
 import glhf.client.GlhfClient;
 import glhf.common.entity.tuple.IdStringEntity;
-import glhf.common.message.EntityListMessage;
+import glhf.common.message.GlhfEntityListMessage;
 import glhf.common.message.GlhfMessageType;
 
 import java.io.IOException;
@@ -18,7 +18,7 @@ import crossnet.util.ByteArrayWriter;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class NamesMessage extends EntityListMessage< IdStringEntity > {
+public class NamesMessage extends GlhfEntityListMessage< IdStringEntity > {
 
 	public NamesMessage( List< IdStringEntity > names ) {
 		super( GlhfMessageType.S_NAMES, names );

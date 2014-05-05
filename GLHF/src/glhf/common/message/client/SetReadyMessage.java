@@ -2,7 +2,7 @@ package glhf.common.message.client;
 
 import glhf.client.GlhfClient;
 import glhf.common.entity.single.BooleanEntity;
-import glhf.common.message.EntityMessage;
+import glhf.common.message.GlhfEntityMessage;
 import glhf.common.message.GlhfMessageType;
 
 /**
@@ -11,7 +11,7 @@ import glhf.common.message.GlhfMessageType;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class SetReadyMessage extends EntityMessage< BooleanEntity > {
+public class SetReadyMessage extends GlhfEntityMessage< BooleanEntity > {
 
 	public SetReadyMessage( boolean ready ) {
 		super( GlhfMessageType.C_READY, new BooleanEntity( ready ) );

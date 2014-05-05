@@ -51,7 +51,7 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 			return;
 		}
 
-		switch ( ( (GlhfMessage) message ).getType() ) {
+		switch ( ( (GlhfMessage) message ).getGlhfType() ) {
 
 		// Server Messages
 

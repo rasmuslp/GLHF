@@ -2,7 +2,7 @@ package glhf.common.message.server;
 
 import glhf.client.GlhfClient;
 import glhf.common.entity.tuple.IdBooleanEntity;
-import glhf.common.message.EntityMessage;
+import glhf.common.message.GlhfEntityMessage;
 import glhf.common.message.GlhfMessageType;
 
 /**
@@ -11,7 +11,7 @@ import glhf.common.message.GlhfMessageType;
  * @author Rasmus Ljungmann Pedersen <rasmuslp@gmail.com>
  * 
  */
-public class ConnectionChangeMessage extends EntityMessage< IdBooleanEntity > {
+public class ConnectionChangeMessage extends GlhfEntityMessage< IdBooleanEntity > {
 
 	/**
 	 * Announces the connection change for a {@link GlhfClient}.

@@ -92,7 +92,7 @@ public class ServerConnectionHandler extends PlayerHandler implements Connection
 		}
 
 		int senderId = connection.getID();
-		switch ( ( (GlhfMessage) message ).getType() ) {
+		switch ( ( (GlhfMessage) message ).getGlhfType() ) {
 
 		// Server Messages
 			case S_IDS:
