@@ -159,8 +159,11 @@ public class ClientConnectionHandler extends PlayerHandler implements Connection
 			}
 
 			case TIERED:
-			default:
 				// Ignored
+				break;
+
+			default:
+				Log.warn( "GLHF", "Got unknown Message Type: " + ( (GlhfMessage) message ).getGlhfType() );
 				break;
 		}
 	}
