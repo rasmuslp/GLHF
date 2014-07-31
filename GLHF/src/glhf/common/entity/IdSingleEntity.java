@@ -12,7 +12,7 @@ import glhf.common.entity.single.IntegerEntity;
  * 
  * @param <T>
  */
-public abstract class IdSingleEntity< T extends SingleEntity< ? > > implements Entity {
+public abstract class IdSingleEntity< T extends Entity > implements Entity {
 
 	/**
 	 * The ID.
